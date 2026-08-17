@@ -13,11 +13,11 @@ No application server, build command, dependency, cookie, or analytics is used. 
 
 ## Private Android counter setup
 
-The public counter is stored in `data/counter.json` on the separate `counter` branch. When Kushagra opens a referral in the Android email app, the phone dispatches `increment-referral-counter.yml`, which increments the total. No referral link, hash, candidate data, or job data is stored. Each successful button click increments the counter, including repeated clicks for the same referral.
+The public counter is stored in the single `data/counter.json` file on `main`. When Kushagra opens a referral in the Android email app, the browser uses GitHub's Contents API to read that file and upload the incremented value with its current SHA. No referral link, hash, candidate data, or job data is stored. Each successful button click increments the counter, including repeated clicks for the same referral.
 
 1. Sign in to GitHub as the repository-owner account `kuspia`, then create a fine-grained personal access token. GitHub does not currently support fine-grained tokens for a personal repository where the token owner is only an outside/repository collaborator.
 2. Limit repository access to `kuspia/refer` only.
-3. Grant repository permission **Actions: Read and write**. Do not grant Contents write access.
+3. Grant repository permission **Contents: Read and write**.
 4. Give it a short expiry.
 5. On the Android phone, open `https://kuspia.github.io/refer/?setup=1`, paste the token, and select **Verify & save**.
 

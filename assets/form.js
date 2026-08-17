@@ -14,9 +14,9 @@
   const tokenSetupDialog = document.querySelector('#token-setup-dialog');
   const tokenInput = document.querySelector('#github-token');
   const tokenSetupStatus = document.querySelector('#token-setup-status');
-  const GITHUB_TOKEN_KEY = 'kushagraReferralActionsToken';
-  const WORKFLOW_API = 'https://api.github.com/repos/kuspia/refer/actions/workflows/increment-referral-counter.yml';
-  const COUNTER_URL = 'https://raw.githubusercontent.com/kuspia/refer/counter/data/counter.json';
+  const GITHUB_TOKEN_KEY = 'kushagraReferralContentsToken';
+  const REPOSITORY_API = 'https://api.github.com/repos/kuspia/refer';
+  const COUNTER_URL = 'https://raw.githubusercontent.com/kuspia/refer/main/data/counter.json';
   let confirmationStep = 1;
   let pendingPayload = null;
   let copyResetTimer = null;
@@ -60,10 +60,12 @@
     const button = document.querySelector('#save-github-token');
     button.disabled = true;
     button.textContent = 'Verifying…';
-    tokenSetupStatus.textContent = 'Checking repository and Actions access…';
+    tokenSetupStatus.textContent = 'Checking repository and Contents access…';
     try {
-      const response = await fetch(WORKFLOW_API, { headers: githubHeaders(token), cache: 'no-store' });
-      if (!response.ok) throw new Error(response.status === 401 || response.status === 403 ? 'Token rejected. Check its expiry and Actions permission.' : `GitHub returned ${response.status}.`);
+      const response = await fetch(REPOSITORY_API, { headers: githubHeaders(token), cache: 'no-store' });
+      if (!response.ok) throw new Error(response.status === 401 || response.status === 403 ? 'Token rejected. Check its expiry and Contents permission.' : `GitHub returned ${response.status}.`);
+      const repository = await response.json();
+      if (!repository?.permissions?.push) throw new Error('The token can read this repository but cannot update files. Grant Contents: read and write.');
       localStorage.setItem(GITHUB_TOKEN_KEY, token);
       tokenInput.value = '';
       tokenSetupStatus.textContent = 'Verified and saved on this device ✓';
