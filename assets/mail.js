@@ -43,7 +43,6 @@
       'JOB DETAILS',
       `Job title: ${payload.job.title}`,
       `Job ID: ${payload.job.id}`,
-      `Description: ${payload.job.description}`,
       '',
       'CANDIDATE DETAILS',
       `Name: ${payload.candidate.name}`,

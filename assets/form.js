@@ -16,7 +16,6 @@
   const requiredChecks = [
     () => /^\d{1,19}$/.test(form.jobId.value),
     () => form.jobTitle.value.trim().length > 0,
-    () => form.jobDescription.value.trim().length > 0,
     () => form.candidateName.value.trim().length > 0,
     () => form.candidateEmail.validity.valid && form.candidateEmail.value.length > 0,
     () => form.resumeUrl.validity.valid && /^https?:\/\//i.test(form.resumeUrl.value),
@@ -50,7 +49,7 @@
       job: {
         id: form.jobId.value.trim(),
         title: form.jobTitle.value.trim(),
-        description: form.jobDescription.value.trim()
+        description: ''
       },
       candidate: {
         name: form.candidateName.value.trim(),
