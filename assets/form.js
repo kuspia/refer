@@ -75,28 +75,32 @@
 
   function showFirstReview(payload) {
     confirmationStep = 1;
-    confirmButton.disabled = false;
+    confirmButton.disabled = true;
     document.querySelector('#modal-step').textContent = 'Final review · 1 of 2';
-    document.querySelector('#modal-title').textContent = 'Is everything correct?';
-    document.querySelector('#modal-copy').textContent = 'Please check these important details. They will be included in the referral email.';
+    document.querySelector('#modal-title').textContent = 'Confirm every requirement';
+    document.querySelector('#modal-copy').textContent = 'Tap each item to turn it green. If any answer is no, go back and correct it before continuing.';
     document.querySelector('#review-list').innerHTML = `
-      <div><dt>Role</dt><dd>${escapeHtml(payload.job.title)} · #${escapeHtml(payload.job.id)}</dd></div>
-      <div><dt>Résumé</dt><dd class="truncate">${escapeHtml(payload.candidate.resumeUrl)}</dd></div>
-      <div><dt>Expected base</dt><dd>${escapeHtml(payload.candidate.expectedSalary)}</dd></div>`;
-    confirmButton.innerHTML = 'Yes, continue <span>→</span>';
+      <label class="confirm-check"><input type="checkbox" data-confirm-check /><span class="check-icon">✓</span><span>Job ID and job title were copied correctly from the linked smallcase jobs website.</span></label>
+      <label class="confirm-check"><input type="checkbox" data-confirm-check /><span class="check-icon">✓</span><span>The recommendation is written in the third person—not using I, me, or my.</span></label>
+      <label class="confirm-check"><input type="checkbox" data-confirm-check /><span class="check-icon">✓</span><span>The résumé includes an email address, contact number, GitHub profile, and LinkedIn profile.</span></label>
+      <label class="confirm-check"><input type="checkbox" data-confirm-check /><span class="check-icon">✓</span><span>The résumé link is publicly accessible and opens without requesting permission.</span></label>`;
+    confirmButton.innerHTML = 'Confirm all to continue <span>→</span>';
     confirmDialog.showModal();
   }
 
   function showSecondReview() {
     confirmationStep = 2;
+    confirmButton.disabled = false;
     document.querySelector('#modal-step').textContent = 'Final confirmation · 2 of 2';
-    document.querySelector('#modal-title').textContent = 'Ready to lock these details?';
-    document.querySelector('#modal-copy').textContent = 'Once generated, changes require a new link. Please confirm that the résumé is publicly accessible and every detail is accurate.';
+    document.querySelector('#modal-title').textContent = 'Are you sure you want to generate the encrypted link?';
+    document.querySelector('#modal-copy').textContent = 'Review the final summary once more. After generation, any correction will require you to create a new link.';
     document.querySelector('#review-list').innerHTML = `
-      <div><dt>Résumé access</dt><dd>Publicly accessible</dd></div>
+      <div><dt>Role</dt><dd>${escapeHtml(pendingPayload.job.title)} · #${escapeHtml(pendingPayload.job.id)}</dd></div>
+      <div><dt>Résumé</dt><dd class="truncate">${escapeHtml(pendingPayload.candidate.resumeUrl)}</dd></div>
+      <div><dt>Expected base</dt><dd>${escapeHtml(pendingPayload.candidate.expectedSalary)}</dd></div>
       <div><dt>Recommendation</dt><dd>${pendingPayload.candidate.writeUp.length} characters · one paragraph</dd></div>
       <div><dt>Ratings</dt><dd>${pendingPayload.candidate.communication}/5 communication · ${pendingPayload.candidate.problemSolving}/5 problem solving</dd></div>`;
-    confirmButton.innerHTML = 'Confirm &amp; create link <span>→</span>';
+    confirmButton.innerHTML = 'Yes, generate encrypted link <span>→</span>';
   }
 
   async function createLink() {
@@ -170,6 +174,14 @@
   });
 
   confirmButton.addEventListener('click', () => confirmationStep === 1 ? showSecondReview() : createLink());
+  document.querySelector('#review-list').addEventListener('change', () => {
+    if (confirmationStep !== 1) return;
+    const checks = [...document.querySelectorAll('[data-confirm-check]')];
+    confirmButton.disabled = checks.length !== 4 || checks.some((check) => !check.checked);
+    confirmButton.innerHTML = confirmButton.disabled
+      ? 'Confirm all to continue <span>→</span>'
+      : 'All confirmed, continue <span>→</span>';
+  });
   document.querySelectorAll('[data-close-modal]').forEach((button) => button.addEventListener('click', () => confirmDialog.close()));
   document.querySelector('#copy-button').addEventListener('click', async (event) => {
     await copyText(generatedLink.value);
