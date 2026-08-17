@@ -238,9 +238,12 @@ input:user-invalid, textarea:user-invalid { border-color: #bd716b; }
   line-height: 1.45;
 }
 
+.field .field-guidance {
+  margin: -1px 0 10px;
+  color: #69736c;
+}
+
 .counter { text-align: right; font-family: "DM Mono", monospace; }
-.field-meta { display: flex; justify-content: space-between; gap: 20px; }
-.field-meta .counter { flex: none; }
 
 .input-with-icon, .input-affix { position: relative; }
 .input-with-icon > span, .input-affix > span, .input-affix > b {
