@@ -11,14 +11,7 @@
     <title>Review referral email</title>
     <script>
       (() => {
-        const url = new URL(window.location.href);
-        let fresh = url.searchParams.get('_fresh');
-        if (!fresh) {
-          fresh = Date.now().toString(36);
-          url.searchParams.set('_fresh', fresh);
-          window.location.replace(url.href);
-          return;
-        }
+        const fresh = Date.now().toString(36);
 
         const stylesheet = document.createElement('link');
         stylesheet.rel = 'stylesheet';
