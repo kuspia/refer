@@ -169,6 +169,10 @@ form { display: grid; gap: 22px; }
 .subsection-heading {
   margin: 10px 0 24px;
   padding-top: 30px;
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 20px;
   border-top: 1px solid var(--line);
 }
 
@@ -377,6 +381,7 @@ footer { padding: 34px; text-align: center; color: #8b928d; font: 10px "DM Mono"
   .form-card { grid-template-columns: 1fr; padding: 24px 18px 28px; }
   .section-number { width: 35px; height: 35px; }
   .section-heading { align-items: flex-start; flex-direction: column; }
+  .subsection-heading { align-items: flex-start; flex-direction: column; }
   .two-col, .ratings-grid, .summary-grid { grid-template-columns: 1fr; }
   .salary-row { gap: 0; }
   .modal-inner { padding: 30px 20px 24px; }

@@ -19,7 +19,7 @@
     () => form.resumeUrl.validity.valid && /^https?:\/\//i.test(form.resumeUrl.value),
     () => form.currentSalary.validity.valid,
     () => form.expectedMode.value === 'standards' || expectedSalary.validity.valid,
-    () => form.writeUp.value.trim().length >= 350 && form.writeUp.value.trim().length <= 1500,
+    () => form.writeUp.value.trim().length >= 350 && form.writeUp.value.trim().length <= 1500 && !/\b(?:i|me|my|mine|myself)\b/i.test(form.writeUp.value),
     () => Boolean(form.communication.value && form.problemSolving.value)
   ];
 
@@ -142,7 +142,13 @@
   });
   form.writeUp.addEventListener('input', (event) => {
     const isSingleParagraph = !/[\r\n]/.test(event.currentTarget.value);
-    event.currentTarget.setCustomValidity(isSingleParagraph ? '' : 'Please write the recommendation as one paragraph without line breaks.');
+    const usesFirstPerson = /\b(?:i|me|my|mine|myself)\b/i.test(event.currentTarget.value);
+    const message = !isSingleParagraph
+      ? 'Please write the recommendation as one paragraph without line breaks.'
+      : usesFirstPerson
+        ? 'Please write in the third person using the candidate’s name and he, she, or they—not I, me, or my.'
+        : '';
+    event.currentTarget.setCustomValidity(message);
     updateFormState();
   });
   document.querySelectorAll('input[name="expectedMode"]').forEach((radio) => radio.addEventListener('change', updateExpectedMode));
