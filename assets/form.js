@@ -269,7 +269,19 @@
       copyButton.textContent = 'Copy again';
     }, 1400);
   });
-  document.querySelector('#done-button').addEventListener('click', () => successDialog.close());
+  document.querySelector('#done-button').addEventListener('click', () => {
+    successDialog.close();
+    form.reset();
+    pendingPayload = null;
+    confirmationStep = 1;
+    generatedLink.value = '';
+    document.querySelector('#link-stats').textContent = '';
+    copyButton.textContent = 'Copy again';
+    document.querySelectorAll('[data-rating-value]').forEach((value) => { value.textContent = 'Not rated'; });
+    updateExpectedMode();
+    updateFormState();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
   document.querySelector('#save-github-token').addEventListener('click', verifyAndSaveToken);
   document.querySelector('#clear-github-token').addEventListener('click', () => {
     localStorage.removeItem(GITHUB_TOKEN_KEY);
