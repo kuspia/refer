@@ -15,7 +15,7 @@ No application server, build command, dependency, cookie, or analytics is used. 
 
 The public counter is stored in `data/counter.json` on the separate `counter` branch. When Kushagra opens a referral in the Android email app, the phone dispatches `increment-referral-counter.yml`, which increments the total. No referral link, hash, candidate data, or job data is stored. Each successful button click increments the counter, including repeated clicks for the same referral.
 
-1. In GitHub, create a fine-grained personal access token.
+1. Sign in to GitHub as the repository-owner account `kuspia`, then create a fine-grained personal access token. GitHub does not currently support fine-grained tokens for a personal repository where the token owner is only an outside/repository collaborator.
 2. Limit repository access to `kuspia/refer` only.
 3. Grant repository permission **Actions: Read and write**. Do not grant Contents write access.
 4. Give it a short expiry.
