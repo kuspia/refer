@@ -38,12 +38,6 @@
     const body = [
       'Hi Team,',
       '',
-      `I would like to refer a candidate for the ${payload.job.title} role (Job ID: ${payload.job.id}).`,
-      '',
-      'JOB DETAILS',
-      `Job title: ${payload.job.title}`,
-      `Job ID: ${payload.job.id}`,
-      '',
       'CANDIDATE DETAILS',
       `Résumé: ${payload.candidate.resumeUrl}`,
       `Current fixed base salary: ${payload.candidate.currentSalary}`,
