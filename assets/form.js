@@ -85,9 +85,7 @@
       <label class="confirm-check"><input type="checkbox" data-confirm-check /><span class="check-icon">✓</span><span>Job ID and job title were copied correctly from the linked smallcase jobs website.</span></label>
       <label class="confirm-check"><input type="checkbox" data-confirm-check /><span class="check-icon">✓</span><span>The recommendation is written in the third person.</span></label>
       <label class="confirm-check"><input type="checkbox" data-confirm-check /><span class="check-icon">✓</span><span>The third-person recommendation is clear, neatly written, and checked for spelling and grammar errors.</span></label>
-      <label class="confirm-check"><input type="checkbox" data-confirm-check /><span class="check-icon">✓</span><span>Résumé includes email, phone, GitHub, and LinkedIn.</span></label>
-      <label class="confirm-check"><input type="checkbox" data-confirm-check /><span class="check-icon">✓</span><span>Résumé is the candidate’s latest version.</span></label>
-      <label class="confirm-check"><input type="checkbox" data-confirm-check /><span class="check-icon">✓</span><span>Résumé link is public and opens without permission.</span></label>`;
+      <label class="confirm-check"><input type="checkbox" data-confirm-check /><span class="check-icon">✓</span><span>Latest résumé is public and includes email, phone, GitHub, and LinkedIn.</span></label>`;
     confirmButton.innerHTML = 'Confirm all to continue <span>→</span>';
     confirmDialog.showModal();
   }
@@ -188,7 +186,7 @@
   document.querySelector('#review-list').addEventListener('change', () => {
     if (confirmationStep === 1) {
       const checks = [...document.querySelectorAll('[data-confirm-check]')];
-      confirmButton.disabled = checks.length !== 6 || checks.some((check) => !check.checked);
+      confirmButton.disabled = checks.length !== 4 || checks.some((check) => !check.checked);
       confirmButton.innerHTML = confirmButton.disabled
         ? 'Confirm all to continue <span>→</span>'
         : 'All confirmed, continue <span>→</span>';
