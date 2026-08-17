@@ -241,6 +241,21 @@ input:user-invalid, textarea:user-invalid { border-color: #bd716b; }
 .field-meta { display: flex; justify-content: space-between; gap: 20px; }
 .field-meta .counter { flex: none; }
 
+.resume-note {
+  margin: -12px 0 28px;
+  padding: 15px 17px;
+  border: 1px solid #cfddd2;
+  border-radius: 10px;
+  color: #556159;
+  background: rgba(220, 238, 227, 0.46);
+  font-size: 10px;
+  line-height: 1.55;
+}
+.resume-note strong { color: var(--green); font-size: 11px; }
+.resume-note ul { margin: 10px 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; list-style: none; }
+.resume-note li { padding: 5px 8px; border-radius: 999px; color: #405248; background: white; border: 1px solid #d9e3da; }
+.resume-note p { margin: 0; }
+
 .input-with-icon, .input-affix { position: relative; }
 .input-with-icon > span, .input-affix > span, .input-affix > b {
   position: absolute;
@@ -372,18 +387,27 @@ footer { padding: 34px; text-align: center; color: #8b928d; font: 10px "DM Mono"
 .hidden { display: none !important; }
 
 @media (max-width: 700px) {
+  body { overflow-x: hidden; }
   .site-header { width: calc(100% - 28px); padding-top: 18px; }
   .secure-pill { font-size: 10px; }
-  .page-shell, .mail-shell { margin-top: 35px; }
+  .page-shell, .mail-shell { width: calc(100% - 24px); margin-top: 35px; }
   .intro { margin-bottom: 38px; }
-  .steps { gap: 8px; overflow: hidden; }
-  .steps i { width: 18px; }
-  .form-card { grid-template-columns: 1fr; padding: 24px 18px 28px; }
+  h1 { overflow-wrap: anywhere; font-size: clamp(31px, 10vw, 42px); }
+  .lede { font-size: 15px; line-height: 1.65; }
+  .privacy-note { padding: 12px 13px; }
+  .steps { gap: 5px; overflow: hidden; font-size: 10px; }
+  .steps i { width: auto; min-width: 7px; flex: 1; }
+  .form-card { grid-template-columns: 1fr; padding: 22px 16px 26px; border-radius: 15px; }
   .section-number { width: 35px; height: 35px; }
   .section-heading { align-items: flex-start; flex-direction: column; }
   .subsection-heading { align-items: flex-start; flex-direction: column; }
+  .source-link { white-space: normal; line-height: 1.5; }
   .two-col, .ratings-grid, .summary-grid { grid-template-columns: 1fr; }
   .salary-row { gap: 0; }
+  input, textarea { font-size: 16px; }
+  .salary-choice span { font-size: 10px; }
+  .resume-note ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .resume-note li { text-align: center; }
   .modal-inner { padding: 30px 20px 24px; }
   .modal-actions { flex-direction: column-reverse; }
   .modal-actions button { width: 100%; }
@@ -391,4 +415,14 @@ footer { padding: 34px; text-align: center; color: #8b928d; font: 10px "DM Mono"
   .mail-card-header, .mail-card-body, .mail-actions { padding-left: 20px; padding-right: 20px; }
   .mail-actions { align-items: stretch; flex-direction: column; }
   .mail-actions .primary-button { width: 100%; }
+  .email-line { grid-template-columns: 52px minmax(0, 1fr); }
+  .email-line strong { overflow-wrap: anywhere; }
+}
+
+@media (max-width: 380px) {
+  .brand > span:last-child { display: none; }
+  .secure-pill { padding: 7px 9px; }
+  .steps span { white-space: normal; text-align: center; }
+  .steps b { display: block; margin: 0 0 3px; }
+  .salary-choice { grid-template-columns: 1fr; height: auto; }
 }

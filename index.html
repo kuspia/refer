@@ -23,7 +23,7 @@
       <section class="intro">
         <p class="eyebrow">Made for thoughtful referrals · Data stays in the link</p>
         <h1>Kushagra Referral Platform</h1>
-        <p class="lede">Please fill in every detail carefully. This is a personal tool created by me to make referrals faster and is not an official smallcase website.</p>
+        <p class="lede">Please fill in every detail carefully. This is a personal tool created by me to make referrals faster and is <strong>not an official smallcase website.</strong></p>
         <p class="privacy-note">Nothing you enter is recorded or uploaded. The form validates and packages your details into a private link, which helps me open a prefilled Gmail draft in one click. I will review everything before sending it to the official referral email. Strict validation keeps every referral complete and consistently formatted.</p>
         <div class="steps" aria-label="How it works">
           <span><b>01</b> Fill details</span>
@@ -74,8 +74,18 @@
             <label class="field">
               <span>Public résumé link <em>Required</em></span>
               <div class="input-with-icon"><span aria-hidden="true">↗</span><input id="resume-url" name="resumeUrl" type="url" maxlength="500" inputmode="url" placeholder="https://drive.google.com/…" required /></div>
-              <small><b>Note:</b> Your résumé must include your full name and current contact details, including your email address. The link must begin with http:// or https:// and open without requesting access.</small>
             </label>
+            <aside class="resume-note" aria-label="Résumé checklist">
+              <strong>Before sharing, make sure your résumé includes:</strong>
+              <ul>
+                <li>Full name</li>
+                <li>Email address</li>
+                <li>Contact number</li>
+                <li>GitHub profile</li>
+                <li>LinkedIn profile</li>
+              </ul>
+              <p>The link must begin with http:// or https:// and open without requesting access.</p>
+            </aside>
 
             <div class="field-grid two-col salary-row">
               <label class="field">
