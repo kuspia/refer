@@ -398,6 +398,7 @@ footer { padding: 34px; text-align: center; color: #8b928d; font: 10px "DM Mono"
 .summary-item span { display: block; margin-bottom: 6px; color: #889089; font-size: 9px; letter-spacing: .08em; text-transform: uppercase; }
 .summary-item strong { display: block; overflow: hidden; text-overflow: ellipsis; font-size: 12px; }
 .email-preview { margin-top: 25px; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+.gmail-ready-copy { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.7; }
 .email-line { display: grid; grid-template-columns: 72px 1fr; gap: 12px; padding: 11px 15px; border-bottom: 1px solid var(--line); font-size: 11px; }
 .email-line span { color: #8b928d; }
 .email-body { max-height: 410px; overflow: auto; padding: 20px; white-space: pre-wrap; color: #455049; background: #fbfcf8; font: 11px/1.75 "DM Mono", monospace; }

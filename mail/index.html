@@ -6,9 +6,9 @@
     <meta name="robots" content="noindex, nofollow" />
     <meta name="theme-color" content="#f7f7f4" />
     <title>Review referral email</title>
-    <link rel="stylesheet" href="../assets/styles.css" />
-    <script src="../assets/codec.js" defer></script>
-    <script src="../assets/mail.js" defer></script>
+    <link rel="stylesheet" href="../assets/styles.css?v=2" />
+    <script src="../assets/codec.js?v=2" defer></script>
+    <script src="../assets/mail.js?v=2" defer></script>
   </head>
   <body>
     <header class="site-header">
@@ -19,7 +19,7 @@
     <main class="mail-shell">
       <section class="mail-intro">
         <p class="eyebrow">Referral handoff</p>
-        <h1>Review, then open in Gmail.</h1>
+        <h1>Open referral in Gmail.</h1>
       </section>
 
       <section id="loading-state" class="state-card" aria-live="polite">
@@ -37,19 +37,14 @@
 
       <section id="mail-review" class="mail-card hidden">
         <div class="mail-card-header">
-          <div><p class="eyebrow" style="color:#bfe0ca">Ready to review</p><h2 id="candidate-heading">Candidate referral</h2></div>
+          <div><p class="eyebrow" style="color:#bfe0ca">Secure handoff complete</p><h2>Referral decrypted</h2></div>
           <span class="verified-pill">✓ Link integrity verified</span>
         </div>
         <div class="mail-card-body">
-          <div class="summary-grid" id="summary-grid"></div>
-          <div class="email-preview">
-            <div class="email-line"><span>To</span><strong id="email-to"></strong></div>
-            <div class="email-line"><span>Subject</span><strong id="email-subject"></strong></div>
-            <div class="email-body" id="email-body"></div>
-          </div>
+          <p class="gmail-ready-copy">The referral is ready. Open Gmail to view and review the complete prefilled email.</p>
         </div>
         <div class="mail-actions">
-          <p>This opens a new Gmail compose window. Please do one final check there and click Send yourself.</p>
+          <p>The complete referral will appear in Gmail. Review it there before clicking Send.</p>
           <button id="open-gmail" class="primary-button" type="button">Open in Gmail <span aria-hidden="true">↗</span></button>
         </div>
       </section>

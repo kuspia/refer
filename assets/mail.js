@@ -63,28 +63,7 @@
 
   function render(payload) {
     const email = buildEmail(payload);
-    document.title = `${payload.job.title} · Referral review`;
-    text('candidate-heading', `Candidate · ${payload.job.title}`);
-    text('email-to', RECIPIENT);
-    text('email-subject', email.subject);
-    text('email-body', email.body);
-    document.querySelector('#summary-grid').innerHTML = '';
-    [
-      ['Role', payload.job.title],
-      ['Job ID', payload.job.id],
-      ['Current base', payload.candidate.currentSalary],
-      ['Expected base', payload.candidate.expectedSalary],
-      ['Ratings', `${payload.candidate.communication}/5 · ${payload.candidate.problemSolving}/5`]
-    ].forEach(([label, value]) => {
-      const item = document.createElement('div');
-      item.className = 'summary-item';
-      const labelNode = document.createElement('span');
-      labelNode.textContent = label;
-      const valueNode = document.createElement('strong');
-      valueNode.textContent = value;
-      item.append(labelNode, valueNode);
-      document.querySelector('#summary-grid').append(item);
-    });
+    document.title = 'Referral ready · Open in Gmail';
     gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(RECIPIENT)}&su=${encodeURIComponent(email.subject)}&body=${encodeURIComponent(email.body)}`;
     loadingState.classList.add('hidden');
     mailReview.classList.remove('hidden');
