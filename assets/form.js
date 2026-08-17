@@ -82,6 +82,17 @@
     updateFormState();
   }
 
+  async function payloadHasOfficialRole(payload) {
+    const jobsUrl = new URL('./data/jobs.json', document.baseURI);
+    jobsUrl.searchParams.set('fresh', Date.now());
+    const response = await fetch(jobsUrl, { cache: 'no-store' });
+    if (!response.ok) throw new Error('The official role list could not be verified. Reload the page and try again.');
+    const data = await response.json();
+    return Array.isArray(data.jobs) && data.jobs.some((job) =>
+      String(job.id) === payload.job.id && job.title === payload.job.title
+    );
+  }
+
   function openTokenSetupIfRequested() {
     const params = new URLSearchParams(window.location.search);
     if (params.get('setup') !== '1') return;
@@ -221,8 +232,16 @@
 
   async function createLink() {
     confirmButton.disabled = true;
-    confirmButton.textContent = 'Encrypting…';
+    confirmButton.textContent = 'Verifying role…';
     try {
+      if (!await payloadHasOfficialRole(pendingPayload)) {
+        confirmDialog.close();
+        pendingPayload = null;
+        alert('Link not generated. Select an active role whose Job ID and title exactly match the official smallcase careers listing.');
+        roleSelect.focus();
+        return;
+      }
+      confirmButton.textContent = 'Encrypting…';
       const token = await window.ReferralCodec.pack(toWire(pendingPayload));
       const mailPage = new URL('./mail/', window.location.href);
       mailPage.search = '';
