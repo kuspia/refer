@@ -38,15 +38,13 @@
     const body = [
       'Hi Team,',
       '',
-      `I would like to refer ${payload.candidate.name} for the ${payload.job.title} role (Job ID: ${payload.job.id}).`,
+      `I would like to refer a candidate for the ${payload.job.title} role (Job ID: ${payload.job.id}).`,
       '',
       'JOB DETAILS',
       `Job title: ${payload.job.title}`,
       `Job ID: ${payload.job.id}`,
       '',
       'CANDIDATE DETAILS',
-      `Name: ${payload.candidate.name}`,
-      `Email: ${payload.candidate.email}`,
       `Résumé: ${payload.candidate.resumeUrl}`,
       `Current fixed base salary: ${payload.candidate.currentSalary}`,
       `Expected fixed base salary: ${payload.candidate.expectedSalary}`,
@@ -70,14 +68,13 @@
 
   function render(payload) {
     const email = buildEmail(payload);
-    document.title = `${payload.candidate.name} · Referral review`;
-    text('candidate-heading', `${payload.candidate.name} · ${payload.job.title}`);
+    document.title = `${payload.job.title} · Referral review`;
+    text('candidate-heading', `Candidate · ${payload.job.title}`);
     text('email-to', RECIPIENT);
     text('email-subject', email.subject);
     text('email-body', email.body);
     document.querySelector('#summary-grid').innerHTML = '';
     [
-      ['Candidate', payload.candidate.name],
       ['Role', payload.job.title],
       ['Job ID', payload.job.id],
       ['Current base', payload.candidate.currentSalary],

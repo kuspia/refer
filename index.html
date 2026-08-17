@@ -71,21 +71,10 @@
               </div>
             </div>
 
-            <div class="field-grid two-col">
-              <label class="field">
-                <span>Full name <em>Required</em></span>
-                <input id="candidate-name" name="candidateName" type="text" maxlength="100" autocomplete="name" placeholder="Your full name" required />
-              </label>
-              <label class="field">
-                <span>Email <em>Required</em></span>
-                <input id="candidate-email" name="candidateEmail" type="email" maxlength="254" autocomplete="email" placeholder="you@example.com" required />
-              </label>
-            </div>
-
             <label class="field">
               <span>Public résumé link <em>Required</em></span>
               <div class="input-with-icon"><span aria-hidden="true">↗</span><input id="resume-url" name="resumeUrl" type="url" maxlength="500" inputmode="url" placeholder="https://drive.google.com/…" required /></div>
-              <small>Must begin with http:// or https://. Please verify it opens without requesting access.</small>
+              <small><b>Note:</b> Your résumé must include your full name and current contact details, including your email address. The link must begin with http:// or https:// and open without requesting access.</small>
             </label>
 
             <div class="field-grid two-col salary-row">
@@ -111,7 +100,6 @@
           <div class="section-content">
             <div class="section-heading">
               <div>
-                <p class="eyebrow">Make the case</p>
                 <h2 id="recommendation-heading">Third-person recommendation</h2>
               </div>
             </div>
@@ -153,7 +141,7 @@
         </section>
 
         <div class="submit-zone">
-          <p id="form-status" aria-live="polite"><span id="completed-count">0</span> of 9 required details complete</p>
+          <p id="form-status" aria-live="polite"><span id="completed-count">0</span> of 7 required details complete</p>
           <button class="primary-button" id="generate-button" type="submit" disabled>
             Review &amp; generate secure link <span aria-hidden="true">→</span>
           </button>

@@ -16,8 +16,6 @@
   const requiredChecks = [
     () => /^\d{1,19}$/.test(form.jobId.value),
     () => form.jobTitle.value.trim().length > 0,
-    () => form.candidateName.value.trim().length > 0,
-    () => form.candidateEmail.validity.valid && form.candidateEmail.value.length > 0,
     () => form.resumeUrl.validity.valid && /^https?:\/\//i.test(form.resumeUrl.value),
     () => form.currentSalary.validity.valid,
     () => form.expectedMode.value === 'standards' || expectedSalary.validity.valid,
@@ -52,8 +50,8 @@
         description: ''
       },
       candidate: {
-        name: form.candidateName.value.trim(),
-        email: form.candidateEmail.value.trim(),
+        name: '',
+        email: '',
         resumeUrl: form.resumeUrl.value.trim(),
         currentSalary: `${Number(form.currentSalary.value)} LPA`,
         expectedSalary: form.expectedMode.value === 'standards' ? 'As per company standards' : `${Number(expectedSalary.value)} LPA`,
@@ -82,7 +80,6 @@
     document.querySelector('#modal-title').textContent = 'Is everything correct?';
     document.querySelector('#modal-copy').textContent = 'Please check these important details. They will be included in the referral email.';
     document.querySelector('#review-list').innerHTML = `
-      <div><dt>Candidate</dt><dd>${escapeHtml(payload.candidate.name)}</dd></div>
       <div><dt>Role</dt><dd>${escapeHtml(payload.job.title)} · #${escapeHtml(payload.job.id)}</dd></div>
       <div><dt>Résumé</dt><dd class="truncate">${escapeHtml(payload.candidate.resumeUrl)}</dd></div>
       <div><dt>Expected base</dt><dd>${escapeHtml(payload.candidate.expectedSalary)}</dd></div>`;
