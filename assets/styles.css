@@ -370,7 +370,7 @@ footer { padding: 34px; text-align: center; color: #8b928d; font: 10px "DM Mono"
   .steps i { width: 18px; }
   .form-card { grid-template-columns: 1fr; padding: 24px 18px 28px; }
   .section-number { width: 35px; height: 35px; }
-  .section-heading { align-items: flex-start; }
+  .section-heading { align-items: flex-start; flex-direction: column; }
   .two-col, .ratings-grid, .summary-grid { grid-template-columns: 1fr; }
   .salary-row { gap: 0; }
   .modal-inner { padding: 30px 20px 24px; }
