@@ -73,10 +73,15 @@
           <span class="verified-pill">✓ Link integrity verified</span>
         </div>
         <div class="mail-card-body">
-          <p class="gmail-ready-copy">The referral is ready. Open Gmail to view and review the complete prefilled email.</p>
+          <p class="gmail-ready-copy">Review exactly what the candidate submitted before opening your email app.</p>
+          <div class="email-preview" aria-label="Referral email preview">
+            <div class="email-line"><span>To</span><strong id="preview-to"></strong></div>
+            <div class="email-line"><span>Subject</span><strong id="preview-subject"></strong></div>
+            <div id="preview-body" class="email-body"></div>
+          </div>
         </div>
         <div class="mail-actions">
-          <p>The complete referral will appear in Gmail. Review it there before clicking Send.</p>
+          <p>The counter changes only after you tap this button. Nothing is sent automatically.</p>
           <a id="open-gmail" class="primary-button" href="#">Open in Gmail <span aria-hidden="true">↗</span></a>
         </div>
       </section>

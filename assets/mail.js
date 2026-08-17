@@ -135,6 +135,9 @@
 
   function render(payload) {
     const email = buildEmail(payload);
+    text('preview-to', RECIPIENT);
+    text('preview-subject', email.subject);
+    text('preview-body', email.body);
     document.title = 'Referral ready · Open in Gmail';
     const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(RECIPIENT)}&su=${encodeURIComponent(email.subject)}&body=${encodeURIComponent(email.body)}`;
     const mailtoUrl = `mailto:${RECIPIENT}?subject=${encodeURIComponent(email.subject)}&body=${encodeURIComponent(email.body)}`;
