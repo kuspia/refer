@@ -6,10 +6,15 @@
   const GITHUB_TOKEN_KEY = 'kushagraReferralContentsToken';
   const COUNTER_API = 'https://api.github.com/repos/kuspia/refer/contents/data/counter.json';
   const COUNTER_PUBLIC_URL = 'https://raw.githubusercontent.com/kuspia/refer/main/data/counter.json';
+  const OFFICIAL_JOBS_API = 'https://kushagra-referral-jobs.kuspia-referral.workers.dev/jobs';
   const loadingState = document.querySelector('#loading-state');
   const errorState = document.querySelector('#error-state');
+  const restrictedState = document.querySelector('#restricted-state');
   const mailReview = document.querySelector('#mail-review');
   const composeLink = document.querySelector('#open-gmail');
+  const mailHeading = document.querySelector('#mail-heading');
+  const recipientWarning = document.querySelector('#recipient-warning');
+  let authorizedGithubToken = '';
 
   async function loadReferralCount() {
     try {
@@ -142,13 +147,11 @@
       composeLink.removeAttribute('target');
       composeLink.removeAttribute('rel');
       composeLink.addEventListener('click', async (event) => {
-        const githubToken = localStorage.getItem(GITHUB_TOKEN_KEY);
-        if (!githubToken) return;
         event.preventDefault();
         composeLink.classList.add('is-busy');
         composeLink.textContent = 'Updating counter…';
         try {
-          await recordReferral(githubToken);
+          await recordReferral(authorizedGithubToken);
         } catch (error) {
           console.warn('Referral counter update failed:', error.message);
         } finally {
@@ -172,8 +175,19 @@
     errorState.classList.remove('hidden');
   }
 
+  function showRestricted() {
+    loadingState.classList.add('hidden');
+    errorState.classList.add('hidden');
+    mailReview.classList.add('hidden');
+    restrictedState.classList.remove('hidden');
+  }
+
+  function getConfiguredDeviceToken() {
+    return localStorage.getItem(GITHUB_TOKEN_KEY)?.trim() || '';
+  }
+
   async function verifyOfficialRole(payload) {
-    const jobsUrl = new URL('../data/jobs.json', document.baseURI);
+    const jobsUrl = new URL(OFFICIAL_JOBS_API);
     jobsUrl.searchParams.set('fresh', Date.now());
     const response = await fetch(jobsUrl, { cache: 'no-store' });
     if (!response.ok) throw new Error('The official role list is unavailable. Reload this page before opening Gmail.');
@@ -184,6 +198,15 @@
 
   async function init() {
     loadReferralCount();
+    authorizedGithubToken = getConfiguredDeviceToken();
+    if (!authorizedGithubToken) {
+      showRestricted();
+      return;
+    }
+    mailHeading.textContent = 'Open referral in Gmail.';
+    recipientWarning.classList.remove('hidden');
+    text('loading-title', 'Opening secure referral…');
+    text('loading-copy', 'Decrypting and decompressing locally in your browser.');
     const token = window.location.hash.slice(1);
     if (!token) {
       showError('The encrypted part after # is missing. Ask the candidate to copy and share the complete link.');

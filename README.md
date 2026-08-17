@@ -1,16 +1,16 @@
 # Secure referral handoff
 
-A dependency-free GitHub Pages site that turns a validated candidate referral form into an encrypted, compressed share link. Opening that link locally decrypts the data, shows a complete email preview, and launches a prefilled Gmail compose window.
+A GitHub Pages site with a small Cloudflare Worker that turns a validated candidate referral form into an encrypted, compressed share link. On Kushagra's configured device, opening that link locally decrypts the data and launches a prefilled Gmail compose window.
 
 ## Flow
 
 1. Candidate completes the form at the repository's GitHub Pages root.
-   The role must be selected from `data/jobs.json`, a snapshot of active roles returned by the official PyjamaHR careers API. The recipient page verifies the exact Job ID/title pair again before enabling Gmail.
+   The role must be selected from the live official PyjamaHR careers response returned through the Worker.
 2. The browser converts the data to a compact positional JSON format, compresses it with `deflate`, encrypts it with a fresh AES-256-GCM key, and stores the result plus key in the URL fragment.
 3. The candidate sends the generated HTTPS link to Kushagra.
-4. `/mail/` validates and previews the referral, then opens Gmail addressed to `refer@smallcase.pyjamahr.com`.
+4. `/mail/` first requires the private-device local-storage key. It then fetches the live roles again, verifies the exact Job ID/title pair, and opens Gmail addressed to `refer@smallcase.pyjamahr.com`.
 
-No application server, build command, dependency, cookie, or analytics is used. The fragment is not included in HTTP requests, though anyone who receives the complete URL can decrypt its contents.
+No candidate data, link, or URL fragment is sent to the Worker. The fragment is not included in HTTP requests, though anyone who receives the complete URL can technically decrypt its contents outside this UI.
 
 ## Private Android counter setup
 
@@ -34,15 +34,15 @@ python3 -m http.server 8000
 
 Then open `http://localhost:8000/`.
 
-## Refresh official roles
+## Live official roles
 
-PyjamaHR only permits browser API requests from its own careers origin, so GitHub Pages reads the checked-in snapshot instead of calling the API directly. Refresh every active-role page and rewrite the snapshot with:
+PyjamaHR does not allow direct browser requests from GitHub Pages. The Cloudflare Worker fetches every paginated jobs page server-side and returns only the active role IDs and titles. Its public response is never cached by the site, so roles are loaded when the form opens and checked again before link generation and before Gmail is revealed.
+
+Deploy Worker changes from `worker/` with:
 
 ```sh
-node scripts/update-jobs.mjs
+npx --yes --package node@22 --package wrangler --call 'wrangler deploy'
 ```
-
-Review and push the resulting `data/jobs.json` change. No candidate can type or submit a role outside this exact ID/title list.
 
 ## Deploy
 

@@ -18,6 +18,7 @@
   const GITHUB_TOKEN_KEY = 'kushagraReferralContentsToken';
   const REPOSITORY_API = 'https://api.github.com/repos/kuspia/refer';
   const COUNTER_URL = 'https://raw.githubusercontent.com/kuspia/refer/main/data/counter.json';
+  const OFFICIAL_JOBS_API = 'https://kushagra-referral-jobs.kuspia-referral.workers.dev/jobs';
   let confirmationStep = 1;
   let pendingPayload = null;
   let copyResetTimer = null;
@@ -46,7 +47,9 @@
 
   async function loadOfficialRoles() {
     try {
-      const jobsUrl = new URL('./data/jobs.json', document.baseURI);
+      roleSelect.innerHTML = '<option value="">Loading current smallcase roles…</option>';
+      roleSelect.disabled = true;
+      const jobsUrl = new URL(OFFICIAL_JOBS_API);
       jobsUrl.searchParams.set('fresh', Date.now());
       const response = await fetch(jobsUrl, { cache: 'no-store' });
       if (!response.ok) throw new Error(`Role list returned ${response.status}.`);
@@ -80,7 +83,7 @@
   }
 
   async function payloadHasOfficialRole(payload) {
-    const jobsUrl = new URL('./data/jobs.json', document.baseURI);
+    const jobsUrl = new URL(OFFICIAL_JOBS_API);
     jobsUrl.searchParams.set('fresh', Date.now());
     const response = await fetch(jobsUrl, { cache: 'no-store' });
     if (!response.ok) throw new Error('The official role list could not be verified. Reload the page and try again.');

@@ -45,14 +45,20 @@
     <main class="mail-shell">
       <section class="mail-intro">
         <p class="eyebrow">Referral handoff</p>
-        <h1>Open referral in Gmail.</h1>
-        <p class="recipient-warning"><strong>This page is only for Kushagra.</strong> Candidates should not open Gmail or send this referral from a personal email account. Referrals sent outside the approved company domain may be automatically rejected or discarded.</p>
+        <h1 id="mail-heading">Private referral handoff.</h1>
+        <p id="recipient-warning" class="recipient-warning hidden"><strong>This page is only for Kushagra.</strong> Candidates should not open Gmail or send this referral from a personal email account. Referrals sent outside the approved company domain may be automatically rejected or discarded.</p>
       </section>
 
       <section id="loading-state" class="state-card" aria-live="polite">
         <div class="loader" aria-hidden="true"></div>
-        <h2>Opening secure referral…</h2>
-        <p>Decrypting and decompressing locally in your browser.</p>
+        <h2 id="loading-title">Verifying this device…</h2>
+        <p id="loading-copy">Checking private handoff access.</p>
+      </section>
+
+      <section id="restricted-state" class="state-card hidden" aria-live="assertive">
+        <div class="error-icon" aria-hidden="true">!</div>
+        <h2>Private handoff</h2>
+        <p>This referral can only be opened from Kushagra’s configured device.</p>
       </section>
 
       <section id="error-state" class="state-card hidden" aria-live="assertive">
