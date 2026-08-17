@@ -5,10 +5,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex, nofollow" />
     <meta name="theme-color" content="#f7f7f4" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
     <title>Review referral email</title>
-    <link rel="stylesheet" href="../assets/styles.css?v=2" />
-    <script src="../assets/codec.js?v=2" defer></script>
-    <script src="../assets/mail.js?v=2" defer></script>
+    <script>
+      (() => {
+        const url = new URL(window.location.href);
+        let fresh = url.searchParams.get('_fresh');
+        if (!fresh) {
+          fresh = Date.now().toString(36);
+          url.searchParams.set('_fresh', fresh);
+          window.location.replace(url.href);
+          return;
+        }
+
+        const stylesheet = document.createElement('link');
+        stylesheet.rel = 'stylesheet';
+        stylesheet.href = `../assets/styles.css?_fresh=${encodeURIComponent(fresh)}`;
+        document.head.append(stylesheet);
+
+        const loadScript = (source) => new Promise((resolve, reject) => {
+          const script = document.createElement('script');
+          script.src = `${source}?_fresh=${encodeURIComponent(fresh)}`;
+          script.onload = resolve;
+          script.onerror = reject;
+          document.head.append(script);
+        });
+
+        window.addEventListener('DOMContentLoaded', async () => {
+          await loadScript('../assets/codec.js');
+          await loadScript('../assets/mail.js');
+        });
+      })();
+    </script>
   </head>
   <body>
     <header class="site-header">
