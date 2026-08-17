@@ -481,6 +481,10 @@ footer { padding: 34px; text-align: center; color: #8b928d; font: 10px "DM Mono"
   .email-line strong { overflow-wrap: anywhere; }
 }
 
+@media (max-width: 520px) {
+  .site-header .secure-pill { display: none; }
+}
+
 @media (max-width: 380px) {
   .brand > span:last-child { display: none; }
   .secure-pill { padding: 7px 9px; }
