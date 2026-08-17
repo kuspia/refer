@@ -21,7 +21,7 @@
     () => form.resumeUrl.validity.valid && /^https?:\/\//i.test(form.resumeUrl.value),
     () => form.currentSalary.validity.valid,
     () => form.expectedMode.value === 'standards' || expectedSalary.validity.valid,
-    () => form.writeUp.value.trim().length >= 350 && form.writeUp.value.trim().length <= 1500 && !/\b(?:i|me|my|mine|myself)\b/i.test(form.writeUp.value),
+    () => form.writeUp.value.trim().length >= 350 && form.writeUp.value.trim().length <= 1500,
     () => Boolean(form.communication.value && form.problemSolving.value)
   ];
 
@@ -148,14 +148,6 @@
   form.addEventListener('change', updateFormState);
   form.jobId.addEventListener('input', (event) => {
     event.currentTarget.value = event.currentTarget.value.replace(/\D/g, '').slice(0, 19);
-    updateFormState();
-  });
-  form.writeUp.addEventListener('input', (event) => {
-    const usesFirstPerson = /\b(?:i|me|my|mine|myself)\b/i.test(event.currentTarget.value);
-    const message = usesFirstPerson
-      ? 'Please write in the third person using the candidate’s name and he, she, or they—not I, me, or my.'
-      : '';
-    event.currentTarget.setCustomValidity(message);
     updateFormState();
   });
   document.querySelectorAll('input[name="expectedMode"]').forEach((radio) => radio.addEventListener('change', updateExpectedMode));
