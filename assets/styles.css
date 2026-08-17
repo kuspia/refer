@@ -320,6 +320,7 @@ fieldset { min-width: 0; padding: 0; margin: 0; border: 0; }
 .primary-button:hover:not(:disabled) { background: #0e3b28; transform: translateY(-1px); }
 .primary-button:disabled { cursor: not-allowed; opacity: 0.34; }
 .secondary-button { min-height: 50px; padding: 0 18px; border: 1px solid var(--line); border-radius: 10px; color: var(--ink); background: white; font-size: 12px; font-weight: 700; }
+#copy-button { min-width: 190px; }
 
 .modal {
   width: min(570px, calc(100% - 28px));

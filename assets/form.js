@@ -13,6 +13,7 @@
   const copyButton = document.querySelector('#copy-button');
   let confirmationStep = 1;
   let pendingPayload = null;
+  let copyResetTimer = null;
 
   const requiredChecks = [
     () => /^\d{1,19}$/.test(form.jobId.value),
@@ -114,6 +115,8 @@
       mailPage.hash = token;
       generatedLink.value = mailPage.href;
       document.querySelector('#link-stats').textContent = `Total length: ${mailPage.href.length.toLocaleString()} characters.`;
+      clearTimeout(copyResetTimer);
+      copyButton.disabled = false;
       copyButton.textContent = 'Copy again';
       confirmDialog.close();
       await copyText(mailPage.href);
@@ -183,7 +186,11 @@
   document.querySelectorAll('[data-close-modal]').forEach((button) => button.addEventListener('click', () => confirmDialog.close()));
   copyButton.addEventListener('click', async () => {
     await copyText(generatedLink.value);
-    copyButton.textContent = 'Copied ✓';
+    copyButton.textContent = 'Copied to clipboard ✓';
+    clearTimeout(copyResetTimer);
+    copyResetTimer = setTimeout(() => {
+      copyButton.textContent = 'Copy again';
+    }, 1400);
   });
   document.querySelector('#done-button').addEventListener('click', () => successDialog.close());
   updateExpectedMode();
