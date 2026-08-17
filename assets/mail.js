@@ -5,10 +5,24 @@
   const REFERRER_NAME = 'Kushagra';
   const GITHUB_TOKEN_KEY = 'kushagraReferralContentsToken';
   const COUNTER_API = 'https://api.github.com/repos/kuspia/refer/contents/data/counter.json';
+  const COUNTER_PUBLIC_URL = 'https://raw.githubusercontent.com/kuspia/refer/main/data/counter.json';
   const loadingState = document.querySelector('#loading-state');
   const errorState = document.querySelector('#error-state');
   const mailReview = document.querySelector('#mail-review');
   const composeLink = document.querySelector('#open-gmail');
+
+  async function loadReferralCount() {
+    try {
+      const response = await fetch(`${COUNTER_PUBLIC_URL}?fresh=${Date.now()}`, { cache: 'no-store' });
+      if (!response.ok) return;
+      const counter = await response.json();
+      if (!Number.isSafeInteger(counter.count) || counter.count < 0) return;
+      document.querySelector('#referral-count').textContent = counter.count.toLocaleString();
+      document.querySelector('#referral-counter').classList.remove('hidden');
+    } catch {
+      // Counter visibility must never block opening a referral.
+    }
+  }
 
   function githubHeaders(githubToken, withBody = false) {
     return {
@@ -169,6 +183,7 @@
   }
 
   async function init() {
+    loadReferralCount();
     const token = window.location.hash.slice(1);
     if (!token) {
       showError('The encrypted part after # is missing. Ask the candidate to copy and share the complete link.');
