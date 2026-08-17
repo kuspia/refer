@@ -98,7 +98,7 @@
       <div><dt>Role</dt><dd>${escapeHtml(pendingPayload.job.title)} · #${escapeHtml(pendingPayload.job.id)}</dd></div>
       <div><dt>Résumé</dt><dd class="truncate">${escapeHtml(pendingPayload.candidate.resumeUrl)}</dd></div>
       <div><dt>Expected base</dt><dd>${escapeHtml(pendingPayload.candidate.expectedSalary)}</dd></div>
-      <div><dt>Recommendation</dt><dd>${pendingPayload.candidate.writeUp.length} characters · one paragraph</dd></div>
+      <div><dt>Recommendation</dt><dd>${pendingPayload.candidate.writeUp.length} characters · third person</dd></div>
       <div><dt>Ratings</dt><dd>${pendingPayload.candidate.communication}/5 communication · ${pendingPayload.candidate.problemSolving}/5 problem solving</dd></div>`;
     confirmButton.innerHTML = 'Yes, generate encrypted link <span>→</span>';
   }
@@ -145,13 +145,10 @@
     updateFormState();
   });
   form.writeUp.addEventListener('input', (event) => {
-    const isSingleParagraph = !/[\r\n]/.test(event.currentTarget.value);
     const usesFirstPerson = /\b(?:i|me|my|mine|myself)\b/i.test(event.currentTarget.value);
-    const message = !isSingleParagraph
-      ? 'Please write the recommendation as one paragraph without line breaks.'
-      : usesFirstPerson
-        ? 'Please write in the third person using the candidate’s name and he, she, or they—not I, me, or my.'
-        : '';
+    const message = usesFirstPerson
+      ? 'Please write in the third person using the candidate’s name and he, she, or they—not I, me, or my.'
+      : '';
     event.currentTarget.setCustomValidity(message);
     updateFormState();
   });
