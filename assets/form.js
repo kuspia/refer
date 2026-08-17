@@ -10,6 +10,7 @@
   const expectedSalary = document.querySelector('#expected-salary');
   const expectedWrap = document.querySelector('#expected-input-wrap');
   const generatedLink = document.querySelector('#generated-link');
+  const copyButton = document.querySelector('#copy-button');
   let confirmationStep = 1;
   let pendingPayload = null;
 
@@ -113,7 +114,7 @@
       mailPage.hash = token;
       generatedLink.value = mailPage.href;
       document.querySelector('#link-stats').textContent = `Total length: ${mailPage.href.length.toLocaleString()} characters.`;
-      document.querySelector('#copy-button').textContent = 'Copy again';
+      copyButton.textContent = 'Copy again';
       confirmDialog.close();
       await copyText(mailPage.href);
       successDialog.showModal();
@@ -180,9 +181,9 @@
       : 'All confirmed, continue <span>→</span>';
   });
   document.querySelectorAll('[data-close-modal]').forEach((button) => button.addEventListener('click', () => confirmDialog.close()));
-  document.querySelector('#copy-button').addEventListener('click', async (event) => {
+  copyButton.addEventListener('click', async () => {
     await copyText(generatedLink.value);
-    event.currentTarget.textContent = 'Copied ✓';
+    copyButton.textContent = 'Copied ✓';
   });
   document.querySelector('#done-button').addEventListener('click', () => successDialog.close());
   updateExpectedMode();
