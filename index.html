@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Create a secure smallcase referral request link." />
+    <meta name="theme-color" content="#f7f7f4" />
+    <title>Referral request · smallcase</title>
+    <link rel="stylesheet" href="./assets/styles.css" />
+    <script src="./assets/codec.js" defer></script>
+    <script src="./assets/form.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="./" aria-label="Referral request home">
+        <span class="brand-mark" aria-hidden="true">r</span>
+        <span>referral request</span>
+      </a>
+      <span class="secure-pill"><span aria-hidden="true">●</span> Encrypted locally</span>
+    </header>
+
+    <main class="page-shell">
+      <section class="intro">
+        <p class="eyebrow">smallcase referrals</p>
+        <h1>Put your best case forward.</h1>
+        <p class="lede">Share the role and a thoughtful third-person recommendation. Your details stay in your browser and are packed into one private link.</p>
+        <div class="steps" aria-label="How it works">
+          <span><b>01</b> Fill details</span>
+          <i aria-hidden="true"></i>
+          <span><b>02</b> Review twice</span>
+          <i aria-hidden="true"></i>
+          <span><b>03</b> Share link</span>
+        </div>
+      </section>
+
+      <form id="referral-form" novalidate>
+        <section class="form-card" aria-labelledby="role-heading">
+          <div class="section-number">01</div>
+          <div class="section-content">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">The opportunity</p>
+                <h2 id="role-heading">Role details</h2>
+              </div>
+              <a class="source-link" href="https://jobs.pyjamahr.com/smallcase" target="_blank" rel="noopener noreferrer">Browse open roles <span>↗</span></a>
+            </div>
+
+            <div class="field-grid two-col">
+              <label class="field">
+                <span>Job ID <em>Required</em></span>
+                <input id="job-id" name="jobId" type="text" inputmode="numeric" pattern="[0-9]+" maxlength="19" placeholder="e.g. 18427" required />
+                <small>Numbers only · maximum 19 digits</small>
+              </label>
+              <label class="field">
+                <span>Job title <em>Required</em></span>
+                <input id="job-title" name="jobTitle" type="text" maxlength="100" placeholder="e.g. Software Engineer II" required />
+              </label>
+            </div>
+
+            <label class="field">
+              <span>Short job description <em>Required</em></span>
+              <textarea id="job-description" name="jobDescription" rows="3" maxlength="200" placeholder="In one or two lines, describe the role you are applying for." required></textarea>
+              <small class="counter"><span data-count-for="job-description">0</span>/200</small>
+            </label>
+          </div>
+        </section>
+
+        <section class="form-card" aria-labelledby="candidate-heading">
+          <div class="section-number">02</div>
+          <div class="section-content">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">About you</p>
+                <h2 id="candidate-heading">Candidate details</h2>
+              </div>
+            </div>
+
+            <div class="field-grid two-col">
+              <label class="field">
+                <span>Full name <em>Required</em></span>
+                <input id="candidate-name" name="candidateName" type="text" maxlength="100" autocomplete="name" placeholder="Your full name" required />
+              </label>
+              <label class="field">
+                <span>Email <em>Required</em></span>
+                <input id="candidate-email" name="candidateEmail" type="email" maxlength="254" autocomplete="email" placeholder="you@example.com" required />
+              </label>
+            </div>
+
+            <label class="field">
+              <span>Public résumé link <em>Required</em></span>
+              <div class="input-with-icon"><span aria-hidden="true">↗</span><input id="resume-url" name="resumeUrl" type="url" maxlength="500" inputmode="url" placeholder="https://drive.google.com/…" required /></div>
+              <small>Must begin with http:// or https://. Please verify it opens without requesting access.</small>
+            </label>
+
+            <div class="field-grid two-col salary-row">
+              <label class="field">
+                <span>Current fixed base salary <em>Required</em></span>
+                <div class="input-affix"><span>₹</span><input id="current-salary" name="currentSalary" type="number" min="0" max="1000" step="0.01" value="0" required /><b>LPA</b></div>
+                <small>Keep this at 0 if you are a fresher or student.</small>
+              </label>
+              <fieldset class="field expected-field">
+                <legend>Expected fixed base salary <em>Required</em></legend>
+                <div class="salary-choice">
+                  <label><input type="radio" name="expectedMode" value="number" checked /><span>Enter amount</span></label>
+                  <label><input type="radio" name="expectedMode" value="standards" /><span>As per company standards</span></label>
+                </div>
+                <div class="input-affix" id="expected-input-wrap"><span>₹</span><input id="expected-salary" name="expectedSalary" type="number" min="0.01" max="1000" step="0.01" placeholder="e.g. 18" required /><b>LPA</b></div>
+              </fieldset>
+            </div>
+          </div>
+        </section>
+
+        <section class="form-card" aria-labelledby="recommendation-heading">
+          <div class="section-number">03</div>
+          <div class="section-content">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Make the case</p>
+                <h2 id="recommendation-heading">Third-person recommendation</h2>
+              </div>
+            </div>
+
+            <label class="field">
+              <span>Why is this candidate a great fit? <em>Required</em></span>
+              <textarea id="write-up" name="writeUp" rows="9" minlength="350" maxlength="1500" placeholder="Kushagra is an excellent fit for this role because…" required></textarea>
+              <div class="field-meta">
+                <small>Write one paragraph in the third person. Minimum 350 characters.</small>
+                <small class="counter"><span data-count-for="write-up">0</span>/1500</small>
+              </div>
+            </label>
+
+            <div class="ratings-grid">
+              <fieldset class="rating-field" data-rating-group>
+                <legend>Communication <em>Required</em></legend>
+                <div class="stars" role="radiogroup" aria-label="Communication rating out of 5">
+                  <input id="communication-5" name="communication" value="5" type="radio" required /><label for="communication-5" title="5 out of 5">★</label>
+                  <input id="communication-4" name="communication" value="4" type="radio" /><label for="communication-4" title="4 out of 5">★</label>
+                  <input id="communication-3" name="communication" value="3" type="radio" /><label for="communication-3" title="3 out of 5">★</label>
+                  <input id="communication-2" name="communication" value="2" type="radio" /><label for="communication-2" title="2 out of 5">★</label>
+                  <input id="communication-1" name="communication" value="1" type="radio" /><label for="communication-1" title="1 out of 5">★</label>
+                </div>
+                <small><span data-rating-value>Not rated</span></small>
+              </fieldset>
+              <fieldset class="rating-field" data-rating-group>
+                <legend>Problem solving <em>Required</em></legend>
+                <div class="stars" role="radiogroup" aria-label="Problem solving rating out of 5">
+                  <input id="problem-solving-5" name="problemSolving" value="5" type="radio" required /><label for="problem-solving-5" title="5 out of 5">★</label>
+                  <input id="problem-solving-4" name="problemSolving" value="4" type="radio" /><label for="problem-solving-4" title="4 out of 5">★</label>
+                  <input id="problem-solving-3" name="problemSolving" value="3" type="radio" /><label for="problem-solving-3" title="3 out of 5">★</label>
+                  <input id="problem-solving-2" name="problemSolving" value="2" type="radio" /><label for="problem-solving-2" title="2 out of 5">★</label>
+                  <input id="problem-solving-1" name="problemSolving" value="1" type="radio" /><label for="problem-solving-1" title="1 out of 5">★</label>
+                </div>
+                <small><span data-rating-value>Not rated</span></small>
+              </fieldset>
+            </div>
+          </div>
+        </section>
+
+        <div class="submit-zone">
+          <p id="form-status" aria-live="polite"><span id="completed-count">0</span> of 10 required details complete</p>
+          <button class="primary-button" id="generate-button" type="submit" disabled>
+            Review &amp; generate secure link <span aria-hidden="true">→</span>
+          </button>
+          <small>Nothing is uploaded or stored. The generated link contains the encrypted form data.</small>
+        </div>
+      </form>
+    </main>
+
+    <dialog id="confirm-dialog" class="modal">
+      <div class="modal-inner">
+        <button class="icon-button" type="button" data-close-modal aria-label="Close">×</button>
+        <p class="eyebrow" id="modal-step">Final review · 1 of 2</p>
+        <h2 id="modal-title">Is everything correct?</h2>
+        <p class="modal-copy" id="modal-copy">Please check these important details. They will be included in the referral email.</p>
+        <dl class="review-list" id="review-list"></dl>
+        <div class="modal-actions">
+          <button type="button" class="secondary-button" data-close-modal>Go back &amp; edit</button>
+          <button type="button" class="primary-button" id="confirm-button">Yes, continue <span>→</span></button>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog id="success-dialog" class="modal success-modal">
+      <div class="modal-inner">
+        <div class="success-icon" aria-hidden="true">✓</div>
+        <p class="eyebrow">Link ready</p>
+        <h2>Please share this link with Kushagra.</h2>
+        <p class="modal-copy">It has been copied to your clipboard. Keep the full link intact—the part after <b>#</b> holds the encrypted details. <span id="link-stats"></span></p>
+        <label class="field link-output"><span>Secure referral link</span><textarea id="generated-link" rows="4" readonly></textarea></label>
+        <div class="modal-actions">
+          <button type="button" class="secondary-button" id="copy-button">Copy again</button>
+          <button type="button" class="primary-button" id="done-button">Done</button>
+        </div>
+      </div>
+    </dialog>
+
+    <footer>Made for thoughtful referrals · Data stays in the link</footer>
+  </body>
+</html>

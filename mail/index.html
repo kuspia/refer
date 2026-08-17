@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="theme-color" content="#f7f7f4" />
+    <title>Review referral email</title>
+    <link rel="stylesheet" href="../assets/styles.css" />
+    <script src="../assets/codec.js" defer></script>
+    <script src="../assets/mail.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="../"><span class="brand-mark" aria-hidden="true">r</span><span>referral request</span></a>
+      <span class="secure-pill"><span aria-hidden="true">●</span> Local decryption</span>
+    </header>
+
+    <main class="mail-shell">
+      <section class="mail-intro">
+        <p class="eyebrow">Referral handoff</p>
+        <h1>Review, then open in Gmail.</h1>
+      </section>
+
+      <section id="loading-state" class="state-card" aria-live="polite">
+        <div class="loader" aria-hidden="true"></div>
+        <h2>Opening secure referral…</h2>
+        <p>Decrypting and decompressing locally in your browser.</p>
+      </section>
+
+      <section id="error-state" class="state-card hidden" aria-live="assertive">
+        <div class="error-icon" aria-hidden="true">!</div>
+        <h2>Couldn’t open this referral</h2>
+        <p id="error-message">The secure link may be incomplete.</p>
+        <a href="../" class="primary-button" style="display:inline-grid;place-items:center;text-decoration:none">Create a new link</a>
+      </section>
+
+      <section id="mail-review" class="mail-card hidden">
+        <div class="mail-card-header">
+          <div><p class="eyebrow" style="color:#bfe0ca">Ready to review</p><h2 id="candidate-heading">Candidate referral</h2></div>
+          <span class="verified-pill">✓ Link integrity verified</span>
+        </div>
+        <div class="mail-card-body">
+          <div class="summary-grid" id="summary-grid"></div>
+          <div class="email-preview">
+            <div class="email-line"><span>To</span><strong id="email-to"></strong></div>
+            <div class="email-line"><span>Subject</span><strong id="email-subject"></strong></div>
+            <div class="email-body" id="email-body"></div>
+          </div>
+        </div>
+        <div class="mail-actions">
+          <p>This opens a new Gmail compose window. Please do one final check there and click Send yourself.</p>
+          <button id="open-gmail" class="primary-button" type="button">Open in Gmail <span aria-hidden="true">↗</span></button>
+        </div>
+      </section>
+    </main>
+
+    <footer>Nothing is sent automatically · You stay in control</footer>
+  </body>
+</html>
