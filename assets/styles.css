@@ -166,6 +166,12 @@ form { display: grid; gap: 22px; }
 
 .section-content { min-width: 0; }
 
+.subsection-heading {
+  margin: 10px 0 24px;
+  padding-top: 30px;
+  border-top: 1px solid var(--line);
+}
+
 .section-heading {
   margin: 2px 0 30px;
   display: flex;
