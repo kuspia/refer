@@ -274,7 +274,7 @@ fieldset { min-width: 0; padding: 0; margin: 0; border: 0; }
   background: #f2f4ef;
 }
 .salary-choice label { cursor: pointer; min-width: 0; }
-.salary-choice input { position: absolute; opacity: 0; pointer-events: none; }
+.salary-choice input { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
 .salary-choice span {
   height: 38px;
   padding: 0 8px;
