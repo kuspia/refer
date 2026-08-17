@@ -78,7 +78,7 @@
   function showFirstReview(payload) {
     confirmationStep = 1;
     confirmButton.disabled = true;
-    document.querySelector('#modal-step').textContent = 'Final review · 1 of 2';
+    document.querySelector('#modal-step').textContent = 'Details review · 1 of 2';
     document.querySelector('#modal-title').textContent = 'Confirm every requirement';
     document.querySelector('#modal-copy').textContent = 'Tap each item to turn it green. If any answer is no, go back and correct it before continuing.';
     document.querySelector('#review-list').innerHTML = `
@@ -95,16 +95,28 @@
   function showSecondReview() {
     confirmationStep = 2;
     confirmButton.disabled = false;
-    document.querySelector('#modal-step').textContent = 'Final confirmation · 2 of 2';
-    document.querySelector('#modal-title').textContent = 'Are you sure you want to generate the encrypted link?';
-    document.querySelector('#modal-copy').textContent = 'Review the final summary once more. After generation, any correction will require you to create a new link.';
+    document.querySelector('#modal-step').textContent = 'Details review · 2 of 2';
+    document.querySelector('#modal-title').textContent = 'Are all these details correct?';
+    document.querySelector('#modal-copy').textContent = 'Review the final summary once more. You will acknowledge the referral process on the next screen.';
     document.querySelector('#review-list').innerHTML = `
       <div><dt>Role</dt><dd>${escapeHtml(pendingPayload.job.title)} · #${escapeHtml(pendingPayload.job.id)}</dd></div>
       <div><dt>Résumé</dt><dd class="truncate">${escapeHtml(pendingPayload.candidate.resumeUrl)}</dd></div>
       <div><dt>Expected base</dt><dd>${escapeHtml(pendingPayload.candidate.expectedSalary)}</dd></div>
       <div><dt>Recommendation</dt><dd>${pendingPayload.candidate.writeUp.length} characters · third person</dd></div>
       <div><dt>Ratings</dt><dd>${pendingPayload.candidate.communication}/5 communication · ${pendingPayload.candidate.problemSolving}/5 problem solving</dd></div>`;
-    confirmButton.innerHTML = 'Yes, generate encrypted link <span>→</span>';
+    confirmButton.innerHTML = 'Details are correct, continue <span>→</span>';
+  }
+
+  function showAcknowledgement() {
+    confirmationStep = 3;
+    confirmButton.disabled = true;
+    document.querySelector('#modal-step').textContent = 'Candidate acknowledgement';
+    document.querySelector('#modal-title').textContent = 'Please acknowledge before sharing';
+    document.querySelector('#modal-copy').textContent = 'Turn both items green to confirm that you understand the referral process.';
+    document.querySelector('#review-list').innerHTML = `
+      <label class="confirm-check"><input type="checkbox" data-acknowledgement /><span class="check-icon">✓</span><span>I understand that I do not need to apply separately through the job portal. If I am shortlisted, HR will contact me directly.</span></label>
+      <label class="confirm-check"><input type="checkbox" data-acknowledgement /><span class="check-icon">✓</span><span>I understand that Kushagra cannot track my application status. I will not follow up with him for updates; if I am shortlisted, HR will contact me directly.</span></label>`;
+    confirmButton.innerHTML = 'Acknowledge both to continue <span>→</span>';
   }
 
   async function createLink() {
@@ -168,14 +180,25 @@
     showFirstReview(pendingPayload);
   });
 
-  confirmButton.addEventListener('click', () => confirmationStep === 1 ? showSecondReview() : createLink());
+  confirmButton.addEventListener('click', () => {
+    if (confirmationStep === 1) showSecondReview();
+    else if (confirmationStep === 2) showAcknowledgement();
+    else createLink();
+  });
   document.querySelector('#review-list').addEventListener('change', () => {
-    if (confirmationStep !== 1) return;
-    const checks = [...document.querySelectorAll('[data-confirm-check]')];
-    confirmButton.disabled = checks.length !== 6 || checks.some((check) => !check.checked);
-    confirmButton.innerHTML = confirmButton.disabled
-      ? 'Confirm all to continue <span>→</span>'
-      : 'All confirmed, continue <span>→</span>';
+    if (confirmationStep === 1) {
+      const checks = [...document.querySelectorAll('[data-confirm-check]')];
+      confirmButton.disabled = checks.length !== 6 || checks.some((check) => !check.checked);
+      confirmButton.innerHTML = confirmButton.disabled
+        ? 'Confirm all to continue <span>→</span>'
+        : 'All confirmed, continue <span>→</span>';
+    } else if (confirmationStep === 3) {
+      const acknowledgements = [...document.querySelectorAll('[data-acknowledgement]')];
+      confirmButton.disabled = acknowledgements.length !== 2 || acknowledgements.some((item) => !item.checked);
+      confirmButton.innerHTML = confirmButton.disabled
+        ? 'Acknowledge both to continue <span>→</span>'
+        : 'Acknowledged, generate link <span>→</span>';
+    }
   });
   document.querySelectorAll('[data-close-modal]').forEach((button) => button.addEventListener('click', () => confirmDialog.close()));
   copyButton.addEventListener('click', async () => {
