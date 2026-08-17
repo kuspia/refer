@@ -2,7 +2,7 @@
   'use strict';
 
   const RECIPIENT = 'refer@smallcase.pyjamahr.com';
-  const REFERRER_NAME = 'Kushagra';
+  const REFERRER_NAME = 'Kushagra Shukla';
   const GITHUB_TOKEN_KEY = 'kushagraReferralContentsToken';
   const COUNTER_API = 'https://api.github.com/repos/kuspia/refer/contents/data/counter.json';
   const COUNTER_PUBLIC_URL = 'https://raw.githubusercontent.com/kuspia/refer/main/data/counter.json';
@@ -110,21 +110,19 @@
     const body = [
       'Hi Team,',
       '',
-      'CANDIDATE DETAILS',
-      `Résumé: ${payload.candidate.resumeUrl}`,
-      `Current fixed base salary: ${payload.candidate.currentSalary}`,
-      `Expected fixed base salary: ${payload.candidate.expectedSalary}`,
-      '',
-      'WHY THEY ARE A GOOD FIT',
       payload.candidate.writeUp,
       '',
       'PROFICIENCY (SELF-RATED BY CANDIDATE)',
       `Communication: ${payload.candidate.communication}/5`,
       `Problem solving: ${payload.candidate.problemSolving}/5`,
       '',
+      `Résumé: ${payload.candidate.resumeUrl}`,
+      `Current fixed base salary: ${payload.candidate.currentSalary}`,
+      `Expected fixed base salary: ${payload.candidate.expectedSalary}`,
+      '',
       'Regards,',
       REFERRER_NAME,
-      'Smallcase (Engineering Team)'
+      'smallcase'
     ].join('\n');
     return { subject, body };
   }
