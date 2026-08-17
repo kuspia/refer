@@ -422,6 +422,7 @@ footer { padding: 34px; text-align: center; color: #8b928d; font: 10px "DM Mono"
 .email-body { max-height: 410px; overflow: auto; padding: 20px; white-space: pre-wrap; color: #455049; background: #fbfcf8; font: 11px/1.75 "DM Mono", monospace; }
 .mail-actions { padding: 22px 30px; display: flex; align-items: center; justify-content: space-between; gap: 20px; border-top: 1px solid var(--line); background: #fafbf7; }
 .mail-actions p { margin: 0; max-width: 410px; color: #7d857f; font-size: 10px; line-height: 1.5; }
+.mail-actions .primary-button { display: inline-flex; align-items: center; justify-content: center; text-decoration: none; }
 .hidden { display: none !important; }
 
 @media (max-width: 700px) {

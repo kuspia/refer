@@ -6,7 +6,7 @@
   const loadingState = document.querySelector('#loading-state');
   const errorState = document.querySelector('#error-state');
   const mailReview = document.querySelector('#mail-review');
-  let gmailUrl = '';
+  const composeLink = document.querySelector('#open-gmail');
 
   function fromWire(wire) {
     if (!Array.isArray(wire) || wire.length !== 13) throw new Error('The referral data has an unsupported format.');
@@ -64,7 +64,20 @@
   function render(payload) {
     const email = buildEmail(payload);
     document.title = 'Referral ready · Open in Gmail';
-    gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(RECIPIENT)}&su=${encodeURIComponent(email.subject)}&body=${encodeURIComponent(email.body)}`;
+    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(RECIPIENT)}&su=${encodeURIComponent(email.subject)}&body=${encodeURIComponent(email.body)}`;
+    const mailtoUrl = `mailto:${RECIPIENT}?subject=${encodeURIComponent(email.subject)}&body=${encodeURIComponent(email.body)}`;
+    const isAndroid = /Android/i.test(navigator.userAgent);
+    composeLink.href = isAndroid ? mailtoUrl : gmailUrl;
+    composeLink.innerHTML = isAndroid
+      ? 'Open in Android email app <span aria-hidden="true">↗</span>'
+      : 'Open in Gmail <span aria-hidden="true">↗</span>';
+    if (isAndroid) {
+      composeLink.removeAttribute('target');
+      composeLink.removeAttribute('rel');
+    } else {
+      composeLink.target = '_blank';
+      composeLink.rel = 'noopener noreferrer';
+    }
     loadingState.classList.add('hidden');
     mailReview.classList.remove('hidden');
   }
@@ -91,8 +104,5 @@
     }
   }
 
-  document.querySelector('#open-gmail').addEventListener('click', () => {
-    if (gmailUrl) window.open(gmailUrl, '_blank', 'noopener,noreferrer');
-  });
   init();
 })();
