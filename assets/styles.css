@@ -101,9 +101,9 @@ h1, h2, p { margin-top: 0; }
 h1 {
   margin-bottom: 18px;
   font-family: "Inter", "Manrope", system-ui, sans-serif;
-  font-size: clamp(32px, 4.7vw, 50px);
-  line-height: 1.08;
-  letter-spacing: -0.04em;
+  font-size: clamp(32px, 4.2vw, 46px);
+  line-height: 1.1;
+  letter-spacing: -0.035em;
   font-weight: 600;
 }
 
