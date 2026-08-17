@@ -85,9 +85,9 @@
       <label class="confirm-check"><input type="checkbox" data-confirm-check /><span class="check-icon">✓</span><span>Job ID and job title were copied correctly from the linked smallcase jobs website.</span></label>
       <label class="confirm-check"><input type="checkbox" data-confirm-check /><span class="check-icon">✓</span><span>The recommendation is written in the third person.</span></label>
       <label class="confirm-check"><input type="checkbox" data-confirm-check /><span class="check-icon">✓</span><span>The third-person recommendation is clear, neatly written, and checked for spelling and grammar errors.</span></label>
-      <label class="confirm-check"><input type="checkbox" data-confirm-check /><span class="check-icon">✓</span><span>The résumé includes an email address, contact number, GitHub profile, and LinkedIn profile.</span></label>
-      <label class="confirm-check"><input type="checkbox" data-confirm-check /><span class="check-icon">✓</span><span>The résumé link points to the candidate’s latest and most up-to-date résumé.</span></label>
-      <label class="confirm-check"><input type="checkbox" data-confirm-check /><span class="check-icon">✓</span><span>The résumé link is publicly accessible and opens without requesting permission.</span></label>`;
+      <label class="confirm-check"><input type="checkbox" data-confirm-check /><span class="check-icon">✓</span><span>Résumé includes email, phone, GitHub, and LinkedIn.</span></label>
+      <label class="confirm-check"><input type="checkbox" data-confirm-check /><span class="check-icon">✓</span><span>Résumé is the candidate’s latest version.</span></label>
+      <label class="confirm-check"><input type="checkbox" data-confirm-check /><span class="check-icon">✓</span><span>Résumé link is public and opens without permission.</span></label>`;
     confirmButton.innerHTML = 'Confirm all to continue <span>→</span>';
     confirmDialog.showModal();
   }
