@@ -84,7 +84,9 @@
     document.querySelector('#review-list').innerHTML = `
       <label class="confirm-check"><input type="checkbox" data-confirm-check /><span class="check-icon">✓</span><span>Job ID and job title were copied correctly from the linked smallcase jobs website.</span></label>
       <label class="confirm-check"><input type="checkbox" data-confirm-check /><span class="check-icon">✓</span><span>The recommendation is written in the third person—not using I, me, or my.</span></label>
+      <label class="confirm-check"><input type="checkbox" data-confirm-check /><span class="check-icon">✓</span><span>The third-person recommendation is clear, neatly written, and checked for spelling and grammar errors.</span></label>
       <label class="confirm-check"><input type="checkbox" data-confirm-check /><span class="check-icon">✓</span><span>The résumé includes an email address, contact number, GitHub profile, and LinkedIn profile.</span></label>
+      <label class="confirm-check"><input type="checkbox" data-confirm-check /><span class="check-icon">✓</span><span>The résumé link points to the candidate’s latest and most up-to-date résumé.</span></label>
       <label class="confirm-check"><input type="checkbox" data-confirm-check /><span class="check-icon">✓</span><span>The résumé link is publicly accessible and opens without requesting permission.</span></label>`;
     confirmButton.innerHTML = 'Confirm all to continue <span>→</span>';
     confirmDialog.showModal();
@@ -178,7 +180,7 @@
   document.querySelector('#review-list').addEventListener('change', () => {
     if (confirmationStep !== 1) return;
     const checks = [...document.querySelectorAll('[data-confirm-check]')];
-    confirmButton.disabled = checks.length !== 4 || checks.some((check) => !check.checked);
+    confirmButton.disabled = checks.length !== 6 || checks.some((check) => !check.checked);
     confirmButton.innerHTML = confirmButton.disabled
       ? 'Confirm all to continue <span>→</span>'
       : 'All confirmed, continue <span>→</span>';
