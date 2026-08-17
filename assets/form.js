@@ -12,7 +12,6 @@
   const generatedLink = document.querySelector('#generated-link');
   const copyButton = document.querySelector('#copy-button');
   const roleSelect = document.querySelector('#job-role');
-  const roleStatus = document.querySelector('#role-status');
   const tokenSetupDialog = document.querySelector('#token-setup-dialog');
   const tokenInput = document.querySelector('#github-token');
   const tokenSetupStatus = document.querySelector('#token-setup-status');
@@ -66,11 +65,9 @@
       });
       if (officialRoles.size === 0) throw new Error('The official role list is invalid.');
       roleSelect.disabled = false;
-      roleStatus.innerHTML = '<strong>Job name and Job ID must strictly match the official smallcase careers listing.</strong><span>Select the role above; manual entries are not accepted.</span>';
     } catch (error) {
       roleSelect.innerHTML = '<option value="">Official roles unavailable — reload the page</option>';
       roleSelect.disabled = true;
-      roleStatus.textContent = 'The official role list could not be verified. Reload the page before continuing.';
     }
     updateFormState();
   }
