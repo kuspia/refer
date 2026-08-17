@@ -158,6 +158,16 @@
     errorState.classList.remove('hidden');
   }
 
+  async function verifyOfficialRole(payload) {
+    const jobsUrl = new URL('../data/jobs.json', document.baseURI);
+    jobsUrl.searchParams.set('fresh', Date.now());
+    const response = await fetch(jobsUrl, { cache: 'no-store' });
+    if (!response.ok) throw new Error('The official role list is unavailable. Reload this page before opening Gmail.');
+    const data = await response.json();
+    const matches = Array.isArray(data.jobs) && data.jobs.some((job) => String(job.id) === payload.job.id && job.title === payload.job.title);
+    if (!matches) throw new Error('This Job ID and title do not match an active role in the official smallcase careers listing. Do not send this referral.');
+  }
+
   async function init() {
     const token = window.location.hash.slice(1);
     if (!token) {
@@ -167,6 +177,7 @@
     try {
       const payload = fromWire(await window.ReferralCodec.unpack(token));
       if (!isValidPayload(payload)) throw new Error('The referral data does not pass validation. Please ask the candidate to generate a new link.');
+      await verifyOfficialRole(payload);
       render(payload);
     } catch (error) {
       showError(error.message || 'The secure link is incomplete or damaged.');

@@ -5,6 +5,7 @@ A dependency-free GitHub Pages site that turns a validated candidate referral fo
 ## Flow
 
 1. Candidate completes the form at the repository's GitHub Pages root.
+   The role must be selected from `data/jobs.json`, a snapshot of active roles returned by the official PyjamaHR careers API. The recipient page verifies the exact Job ID/title pair again before enabling Gmail.
 2. The browser converts the data to a compact positional JSON format, compresses it with `deflate`, encrypts it with a fresh AES-256-GCM key, and stores the result plus key in the URL fragment.
 3. The candidate sends the generated HTTPS link to Kushagra.
 4. `/mail/` validates and previews the referral, then opens Gmail addressed to `refer@smallcase.pyjamahr.com`.
@@ -32,6 +33,16 @@ python3 -m http.server 8000
 ```
 
 Then open `http://localhost:8000/`.
+
+## Refresh official roles
+
+PyjamaHR only permits browser API requests from its own careers origin, so GitHub Pages reads the checked-in snapshot instead of calling the API directly. Refresh every active-role page and rewrite the snapshot with:
+
+```sh
+node scripts/update-jobs.mjs
+```
+
+Review and push the resulting `data/jobs.json` change. No candidate can type or submit a role outside this exact ID/title list.
 
 ## Deploy
 

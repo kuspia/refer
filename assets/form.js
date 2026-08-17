@@ -11,6 +11,8 @@
   const expectedWrap = document.querySelector('#expected-input-wrap');
   const generatedLink = document.querySelector('#generated-link');
   const copyButton = document.querySelector('#copy-button');
+  const roleSelect = document.querySelector('#job-role');
+  const roleStatus = document.querySelector('#role-status');
   const tokenSetupDialog = document.querySelector('#token-setup-dialog');
   const tokenInput = document.querySelector('#github-token');
   const tokenSetupStatus = document.querySelector('#token-setup-status');
@@ -20,6 +22,7 @@
   let confirmationStep = 1;
   let pendingPayload = null;
   let copyResetTimer = null;
+  const officialRoles = new Map();
 
   function githubHeaders(token) {
     return {
@@ -40,6 +43,43 @@
     } catch {
       // The form remains fully usable if the public counter cannot be loaded.
     }
+  }
+
+  async function loadOfficialRoles() {
+    try {
+      const jobsUrl = new URL('./data/jobs.json', document.baseURI);
+      jobsUrl.searchParams.set('fresh', Date.now());
+      const response = await fetch(jobsUrl, { cache: 'no-store' });
+      if (!response.ok) throw new Error(`Role list returned ${response.status}.`);
+      const data = await response.json();
+      if (!Array.isArray(data.jobs) || data.jobs.length === 0) throw new Error('No active roles were returned.');
+      officialRoles.clear();
+      roleSelect.innerHTML = '<option value="">Select an active smallcase role</option>';
+      data.jobs.forEach((job) => {
+        const id = String(job.id);
+        if (!/^\d{1,19}$/.test(id) || typeof job.title !== 'string' || !job.title.trim()) return;
+        officialRoles.set(id, job.title.trim());
+        const option = document.createElement('option');
+        option.value = id;
+        option.textContent = `${job.title.trim()} · Job ID ${id}`;
+        roleSelect.append(option);
+      });
+      if (officialRoles.size === 0) throw new Error('The official role list is invalid.');
+      roleSelect.disabled = false;
+      roleStatus.innerHTML = '<strong>Job name and Job ID must strictly match the official smallcase careers listing.</strong> Select the role here; manual entries are not accepted.';
+    } catch (error) {
+      roleSelect.innerHTML = '<option value="">Official roles unavailable — reload the page</option>';
+      roleSelect.disabled = true;
+      roleStatus.textContent = 'The official role list could not be verified. Reload the page before continuing.';
+    }
+    updateFormState();
+  }
+
+  function syncSelectedRole() {
+    const title = officialRoles.get(roleSelect.value) || '';
+    form.jobId.value = title ? roleSelect.value : '';
+    form.jobTitle.value = title;
+    updateFormState();
   }
 
   function openTokenSetupIfRequested() {
@@ -78,8 +118,8 @@
   }
 
   const requiredChecks = [
-    () => /^\d{1,19}$/.test(form.jobId.value),
-    () => form.jobTitle.value.trim().length > 0,
+    () => /^\d{1,19}$/.test(form.jobId.value) && officialRoles.has(form.jobId.value),
+    () => officialRoles.get(form.jobId.value) === form.jobTitle.value,
     () => form.resumeUrl.validity.valid && /^https?:\/\//i.test(form.resumeUrl.value),
     () => form.currentSalary.validity.valid,
     () => form.expectedMode.value === 'standards' || expectedSalary.validity.valid,
@@ -144,7 +184,7 @@
     document.querySelector('#modal-title').textContent = 'Confirm every requirement';
     document.querySelector('#modal-copy').textContent = 'Tap each item to turn it green. If any answer is no, go back and correct it before continuing.';
     document.querySelector('#review-list').innerHTML = `
-      <label class="confirm-check"><input type="checkbox" data-confirm-check /><span class="check-icon">✓</span><span>Job ID and job title were copied correctly from the linked smallcase jobs website.</span></label>
+      <label class="confirm-check"><input type="checkbox" data-confirm-check /><span class="check-icon">✓</span><span>The correct active role was selected from the official smallcase careers listing.</span></label>
       <label class="confirm-check"><input type="checkbox" data-confirm-check /><span class="check-icon">✓</span><span>The recommendation is written in the third person.</span></label>
       <label class="confirm-check"><input type="checkbox" data-confirm-check /><span class="check-icon">✓</span><span>The third-person recommendation is clear, neatly written, and checked for spelling and grammar errors.</span></label>
       <label class="confirm-check"><input type="checkbox" data-confirm-check /><span class="check-icon">✓</span><span>Latest résumé is public and includes email, phone, GitHub, and LinkedIn.</span></label>`;
@@ -218,10 +258,7 @@
 
   form.addEventListener('input', updateFormState);
   form.addEventListener('change', updateFormState);
-  form.jobId.addEventListener('input', (event) => {
-    event.currentTarget.value = event.currentTarget.value.replace(/\D/g, '').slice(0, 19);
-    updateFormState();
-  });
+  roleSelect.addEventListener('change', syncSelectedRole);
   document.querySelectorAll('input[name="expectedMode"]').forEach((radio) => radio.addEventListener('change', updateExpectedMode));
   document.querySelectorAll('[data-rating-group]').forEach((group) => {
     group.addEventListener('change', () => {
@@ -272,6 +309,7 @@
   document.querySelector('#done-button').addEventListener('click', () => {
     successDialog.close();
     form.reset();
+    syncSelectedRole();
     pendingPayload = null;
     confirmationStep = 1;
     generatedLink.value = '';
@@ -290,6 +328,7 @@
   });
   document.querySelector('#close-token-setup').addEventListener('click', () => tokenSetupDialog.close());
   updateExpectedMode();
+  loadOfficialRoles();
   loadReferralCount();
   openTokenSetupIfRequested();
 })();

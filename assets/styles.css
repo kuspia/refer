@@ -31,7 +31,7 @@ body {
   min-height: 100vh;
 }
 
-button, input, textarea { font: inherit; }
+button, input, select, textarea { font: inherit; }
 button, a { -webkit-tap-highlight-color: transparent; }
 
 .site-header {
@@ -231,7 +231,7 @@ h2 { margin-bottom: 0; font-size: 25px; line-height: 1.25; letter-spacing: -0.03
 
 em { color: #87918a; font-style: normal; font-size: 9px; letter-spacing: 0.07em; text-transform: uppercase; }
 
-input, textarea {
+input, select, textarea {
   width: 100%;
   border: 1px solid #d8ddd6;
   border-radius: 10px;
@@ -241,11 +241,12 @@ input, textarea {
   transition: border-color 160ms, box-shadow 160ms, background 160ms;
 }
 
-input { height: 48px; padding: 0 14px; }
+input, select { height: 48px; padding: 0 14px; }
 textarea { padding: 13px 14px; line-height: 1.65; resize: vertical; }
 input::placeholder, textarea::placeholder { color: #a1a9a2; }
-input:focus, textarea:focus { border-color: #639477; box-shadow: 0 0 0 3px rgba(37, 106, 76, 0.1); background: white; }
-input:user-invalid, textarea:user-invalid { border-color: #bd716b; }
+input:focus, select:focus, textarea:focus { border-color: #639477; box-shadow: 0 0 0 3px rgba(37, 106, 76, 0.1); background: white; }
+input:user-invalid, select:user-invalid, textarea:user-invalid { border-color: #bd716b; }
+select:disabled { cursor: wait; color: #8a928c; }
 
 .field small, .rating-field small {
   display: block;
@@ -468,7 +469,7 @@ footer { padding: 34px; text-align: center; color: #8b928d; font: 10px "DM Mono"
   .source-link { white-space: normal; line-height: 1.5; }
   .two-col, .ratings-grid, .summary-grid { grid-template-columns: 1fr; }
   .salary-row { gap: 0; }
-  input, textarea { font-size: 16px; }
+  input, select, textarea { font-size: 16px; }
   .salary-choice span { font-size: 10px; }
   .modal-inner { padding: 30px 20px 24px; }
   .modal-actions { flex-direction: column-reverse; }
