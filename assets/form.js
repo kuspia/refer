@@ -11,9 +11,69 @@
   const expectedWrap = document.querySelector('#expected-input-wrap');
   const generatedLink = document.querySelector('#generated-link');
   const copyButton = document.querySelector('#copy-button');
+  const tokenSetupDialog = document.querySelector('#token-setup-dialog');
+  const tokenInput = document.querySelector('#github-token');
+  const tokenSetupStatus = document.querySelector('#token-setup-status');
+  const GITHUB_TOKEN_KEY = 'kushagraReferralActionsToken';
+  const WORKFLOW_API = 'https://api.github.com/repos/kuspia/refer/actions/workflows/increment-referral-counter.yml';
+  const COUNTER_URL = 'https://raw.githubusercontent.com/kuspia/refer/counter/data/counter.json';
   let confirmationStep = 1;
   let pendingPayload = null;
   let copyResetTimer = null;
+
+  function githubHeaders(token) {
+    return {
+      Accept: 'application/vnd.github+json',
+      Authorization: `Bearer ${token}`,
+      'X-GitHub-Api-Version': '2022-11-28'
+    };
+  }
+
+  async function loadReferralCount() {
+    try {
+      const response = await fetch(`${COUNTER_URL}?fresh=${Date.now()}`, { cache: 'no-store' });
+      if (!response.ok) return;
+      const counter = await response.json();
+      if (!Number.isSafeInteger(counter.count) || counter.count < 0) return;
+      document.querySelector('#referral-count').textContent = counter.count.toLocaleString();
+      document.querySelector('#referral-counter').classList.remove('hidden');
+    } catch {
+      // The form remains fully usable if the public counter cannot be loaded.
+    }
+  }
+
+  function openTokenSetupIfRequested() {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('setup') !== '1') return;
+    tokenSetupStatus.textContent = localStorage.getItem(GITHUB_TOKEN_KEY)
+      ? 'A token is already saved on this device. You can replace or clear it.'
+      : 'No token is saved on this device.';
+    tokenSetupDialog.showModal();
+  }
+
+  async function verifyAndSaveToken() {
+    const token = tokenInput.value.trim();
+    if (!token) {
+      tokenSetupStatus.textContent = 'Paste a token first.';
+      return;
+    }
+    const button = document.querySelector('#save-github-token');
+    button.disabled = true;
+    button.textContent = 'Verifying…';
+    tokenSetupStatus.textContent = 'Checking repository and Actions access…';
+    try {
+      const response = await fetch(WORKFLOW_API, { headers: githubHeaders(token), cache: 'no-store' });
+      if (!response.ok) throw new Error(response.status === 401 || response.status === 403 ? 'Token rejected. Check its expiry and Actions permission.' : `GitHub returned ${response.status}.`);
+      localStorage.setItem(GITHUB_TOKEN_KEY, token);
+      tokenInput.value = '';
+      tokenSetupStatus.textContent = 'Verified and saved on this device ✓';
+    } catch (error) {
+      tokenSetupStatus.textContent = error.message || 'Could not verify the token.';
+    } finally {
+      button.disabled = false;
+      button.textContent = 'Verify & save';
+    }
+  }
 
   const requiredChecks = [
     () => /^\d{1,19}$/.test(form.jobId.value),
@@ -208,5 +268,14 @@
     }, 1400);
   });
   document.querySelector('#done-button').addEventListener('click', () => successDialog.close());
+  document.querySelector('#save-github-token').addEventListener('click', verifyAndSaveToken);
+  document.querySelector('#clear-github-token').addEventListener('click', () => {
+    localStorage.removeItem(GITHUB_TOKEN_KEY);
+    tokenInput.value = '';
+    tokenSetupStatus.textContent = 'Saved token cleared from this device.';
+  });
+  document.querySelector('#close-token-setup').addEventListener('click', () => tokenSetupDialog.close());
   updateExpectedMode();
+  loadReferralCount();
+  openTokenSetupIfRequested();
 })();

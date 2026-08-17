@@ -3,10 +3,27 @@
 
   const RECIPIENT = 'refer@smallcase.pyjamahr.com';
   const REFERRER_NAME = 'Kushagra';
+  const GITHUB_TOKEN_KEY = 'kushagraReferralActionsToken';
+  const WORKFLOW_DISPATCH_API = 'https://api.github.com/repos/kuspia/refer/actions/workflows/increment-referral-counter.yml/dispatches';
   const loadingState = document.querySelector('#loading-state');
   const errorState = document.querySelector('#error-state');
   const mailReview = document.querySelector('#mail-review');
   const composeLink = document.querySelector('#open-gmail');
+
+  async function recordReferral(githubToken) {
+    const response = await fetch(WORKFLOW_DISPATCH_API, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/vnd.github+json',
+        Authorization: `Bearer ${githubToken}`,
+        'Content-Type': 'application/json',
+        'X-GitHub-Api-Version': '2022-11-28'
+      },
+      body: JSON.stringify({ ref: 'main' }),
+      keepalive: true
+    });
+    if (!response.ok) throw new Error(`GitHub counter returned ${response.status}.`);
+  }
 
   function fromWire(wire) {
     if (!Array.isArray(wire) || wire.length !== 13) throw new Error('The referral data has an unsupported format.');
@@ -74,6 +91,13 @@
     if (isAndroid) {
       composeLink.removeAttribute('target');
       composeLink.removeAttribute('rel');
+      composeLink.addEventListener('click', (event) => {
+        const githubToken = localStorage.getItem(GITHUB_TOKEN_KEY);
+        if (!githubToken) return;
+        event.preventDefault();
+        recordReferral(githubToken).catch((error) => console.warn('Referral counter update failed:', error.message));
+        window.location.assign(mailtoUrl);
+      });
     } else {
       composeLink.target = '_blank';
       composeLink.rel = 'noopener noreferrer';

@@ -9,7 +9,19 @@ A dependency-free GitHub Pages site that turns a validated candidate referral fo
 3. The candidate sends the generated HTTPS link to Kushagra.
 4. `/mail/` validates and previews the referral, then opens Gmail addressed to `refer@smallcase.pyjamahr.com`.
 
-No server, build command, dependency, cookie, analytics, or data store is used. The fragment is not included in HTTP requests, though anyone who receives the complete URL can decrypt its contents.
+No application server, build command, dependency, cookie, or analytics is used. The fragment is not included in HTTP requests, though anyone who receives the complete URL can decrypt its contents.
+
+## Private Android counter setup
+
+The public counter is stored in `data/counter.json` on the separate `counter` branch. When Kushagra opens a referral in the Android email app, the phone dispatches `increment-referral-counter.yml`, which increments the total. No referral link, hash, candidate data, or job data is stored. Each successful button click increments the counter, including repeated clicks for the same referral.
+
+1. In GitHub, create a fine-grained personal access token.
+2. Limit repository access to `kuspia/refer` only.
+3. Grant repository permission **Actions: Read and write**. Do not grant Contents write access.
+4. Give it a short expiry.
+5. On the Android phone, open `https://kuspia.github.io/refer/?setup=1`, paste the token, and select **Verify & save**.
+
+The token remains in that browser's local storage. Repeat setup after changing phones, browsers, clearing site data, or rotating the token. Anyone with access to the unlocked browser profile may be able to retrieve it, so revoke it immediately if the device is lost.
 
 ## Run locally
 
