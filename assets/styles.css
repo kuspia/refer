@@ -108,9 +108,22 @@ h1 {
 
 .lede {
   max-width: 660px;
+  margin-bottom: 12px;
   color: var(--muted);
   font-size: 17px;
   line-height: 1.75;
+}
+
+.privacy-note {
+  max-width: 760px;
+  margin-bottom: 0;
+  padding: 14px 16px;
+  border-left: 3px solid var(--green-bright);
+  border-radius: 0 9px 9px 0;
+  color: #58635c;
+  background: rgba(220, 238, 227, 0.55);
+  font-size: 12px;
+  line-height: 1.7;
 }
 
 .steps {
