@@ -46,7 +46,7 @@
       'WHY THEY ARE A GOOD FIT',
       payload.candidate.writeUp,
       '',
-      'PROFICIENCY',
+      'PROFICIENCY (SELF-RATED BY CANDIDATE)',
       `Communication: ${payload.candidate.communication}/5`,
       `Problem solving: ${payload.candidate.problemSolving}/5`,
       '',
