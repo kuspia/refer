@@ -261,11 +261,11 @@ select:disabled { cursor: wait; color: #8a928c; }
   color: #69736c;
 }
 
-.role-field > span { margin-bottom: 14px; }
-.role-field select { margin-bottom: 14px; }
+.role-field > span { margin-bottom: 16px; }
+.role-field select { margin-bottom: 22px; }
 .field .role-guidance {
   margin: 0;
-  padding: 12px 14px;
+  padding: 14px 16px;
   border-radius: 9px;
   color: #536159;
   background: rgba(220, 238, 227, 0.55);
