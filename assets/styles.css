@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@500;600&family=Manrope:wght@400;500;600;700&display=swap');
 
 :root {
   --ink: #17211b;
@@ -100,9 +100,10 @@ h1, h2, p { margin-top: 0; }
 
 h1 {
   margin-bottom: 18px;
-  font-size: clamp(34px, 5.2vw, 56px);
-  line-height: 1.05;
-  letter-spacing: -0.05em;
+  font-family: "Inter", "Manrope", system-ui, sans-serif;
+  font-size: clamp(32px, 4.7vw, 50px);
+  line-height: 1.08;
+  letter-spacing: -0.04em;
   font-weight: 600;
 }
 
