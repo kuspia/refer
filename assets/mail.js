@@ -57,7 +57,8 @@
       `Problem solving: ${payload.candidate.problemSolving}/5`,
       '',
       'Regards,',
-      REFERRER_NAME
+      REFERRER_NAME,
+      'Smallcase (Engineering Team)'
     ].join('\n');
     return { subject, body };
   }
