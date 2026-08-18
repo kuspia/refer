@@ -361,13 +361,9 @@ fieldset { min-width: 0; padding: 0; margin: 0; border: 0; }
 .modal-copy { color: var(--muted); font-size: 13px; line-height: 1.65; }
 .review-timer {
   margin: 20px 0 6px;
-  padding: 12px 14px;
   display: flex;
   align-items: center;
   gap: 10px;
-  border: 1px solid #d8e1d9;
-  border-radius: 10px;
-  background: #f4f8f3;
 }
 .review-bomb { position: relative; display: inline-block; flex: 0 0 auto; width: 38px; height: 36px; transform-origin: 50% 65%; animation: bomb-wobble 1.8s ease-in-out infinite; }
 .bomb-body { position: absolute; right: 3px; bottom: 2px; width: 29px; height: 29px; border-radius: 48% 52% 46% 54%; background: radial-gradient(circle at 34% 28%, #6f8277 0 7%, #385847 8% 35%, #1d3d2d 66%, #112a1e 100%); box-shadow: inset -3px -4px 0 rgba(7, 25, 17, .26), 2px 4px 0 rgba(20, 54, 38, .13); animation: bomb-erode var(--bomb-duration, 20000ms) linear forwards; }
@@ -375,7 +371,6 @@ fieldset { min-width: 0; padding: 0; margin: 0; border: 0; }
 .bomb-fuse { position: absolute; top: 0; right: 8px; z-index: 1; width: 12px; height: 13px; border-top: 3px solid #7a6844; border-right: 3px solid #7a6844; border-radius: 0 10px 0 0; transform: rotate(-18deg); transform-origin: bottom left; }
 .bomb-spark { position: absolute; top: -7px; right: -6px; width: 7px; height: 7px; border-radius: 50%; background: #ffd45a; box-shadow: 0 0 5px 2px rgba(245, 175, 45, .72); animation: fuse-flicker .55s ease-in-out infinite alternate; }
 .review-timer > span:last-child { color: #4f6257; font-size: 11px; font-weight: 700; }
-.review-timer.is-complete { border-color: #9bc3a7; background: #edf7f0; }
 .review-bomb.is-complete { animation: bomb-blast .7s ease-out forwards; filter: saturate(1.5) brightness(1.15); }
 @keyframes bomb-wobble { 0%, 100% { transform: rotate(-4deg) translateY(1px); } 50% { transform: rotate(5deg) translateY(-2px); } }
 @keyframes bomb-erode { 0% { opacity: 1; transform: scale(1); clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); } 55% { opacity: .94; transform: scale(.9) rotate(-4deg); clip-path: polygon(5% 0, 100% 7%, 93% 100%, 0 91%); } 82% { opacity: .72; transform: scale(.7) rotate(8deg); clip-path: polygon(21% 4%, 85% 11%, 96% 79%, 12% 100%); } 100% { opacity: .18; transform: scale(.42) rotate(18deg); clip-path: polygon(42% 12%, 73% 25%, 82% 67%, 28% 78%); } }
