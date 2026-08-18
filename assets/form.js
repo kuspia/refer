@@ -240,13 +240,13 @@
       confirmButton.innerHTML = actionReady
         ? 'All confirmed, continue <span>→</span>'
         : allChecked
-          ? 'Keep reading to continue <span>→</span>'
+          ? "Keep reading, don't skip <span>→</span>"
           : 'Confirm all to continue <span>→</span>';
     } else {
       confirmButton.innerHTML = actionReady
         ? 'Acknowledged, generate link <span>→</span>'
         : allChecked
-          ? 'Keep reading to continue <span>→</span>'
+          ? "Keep reading, don't skip <span>→</span>"
           : 'Acknowledge both to continue <span>→</span>';
     }
   }
