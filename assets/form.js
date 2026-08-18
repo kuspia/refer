@@ -19,8 +19,8 @@
   const REPOSITORY_API = 'https://api.github.com/repos/kuspia/refer';
   const COUNTER_URL = 'https://raw.githubusercontent.com/kuspia/refer/main/data/counter.json';
   const OFFICIAL_JOBS_API = 'https://kushagra-referral-jobs.kuspia-referral.workers.dev/jobs';
-  const DETAILS_REVIEW_MINIMUM_MS = 16000;
-  const ACKNOWLEDGEMENT_MINIMUM_MS = 13000;
+  const DETAILS_REVIEW_MINIMUM_MS = 20000;
+  const ACKNOWLEDGEMENT_MINIMUM_MS = 15000;
   let confirmationStep = 1;
   let pendingPayload = null;
   let copyResetTimer = null;
@@ -202,28 +202,24 @@
     const timer = document.querySelector('#review-timer');
     timer.classList.toggle('hidden', !visible);
     if (!visible) return;
-    document.querySelector('#review-timer-progress').style.transform = 'scaleX(0)';
-    document.querySelector('#review-timer-status').textContent = 'Review in progress';
+    document.querySelector('#review-bomb').classList.remove('is-complete');
   }
 
   function startReadingTimer(durationMs) {
     clearReadingTimer();
     setReviewTimerVisible(true);
     const startedAt = performance.now();
-    const progress = document.querySelector('#review-timer-progress');
-    const status = document.querySelector('#review-timer-status');
 
     const tick = () => {
       const ratio = Math.min(1, (performance.now() - startedAt) / durationMs);
-      progress.style.transform = `scaleX(${ratio})`;
       if (ratio < 1) {
         readingTimer = window.setTimeout(tick, 100);
         return;
       }
       readingTimer = null;
       readingGateComplete = true;
-      status.textContent = 'You can continue when ready';
       document.querySelector('#review-timer').classList.add('is-complete');
+      document.querySelector('#review-bomb').classList.add('is-complete');
       updateChecklistAction();
     };
 
