@@ -19,12 +19,16 @@
   const REPOSITORY_API = 'https://api.github.com/repos/kuspia/refer';
   const COUNTER_URL = 'https://raw.githubusercontent.com/kuspia/refer/main/data/counter.json';
   const OFFICIAL_JOBS_API = 'https://kushagra-referral-jobs.kuspia-referral.workers.dev/jobs';
-  const DETAILS_REVIEW_MINIMUM_MS = 16000;
-  const ACKNOWLEDGEMENT_MINIMUM_MS = 16000;
+  const DETAILS_REVIEW_MINIMUM_MS = 15000;
+  const ACKNOWLEDGEMENT_MINIMUM_MS = 15000;
+  const READING_CYCLE_MS = 3000;
+  const READING_FALL_MS = 2200;
+  const READING_CYCLES = 5;
   let confirmationStep = 1;
   let pendingPayload = null;
   let copyResetTimer = null;
   let readingTimer = null;
+  const readingAnimationTimers = new Set();
   let readingGateComplete = false;
   const officialRoles = new Map();
 
@@ -192,40 +196,75 @@
     ];
   }
 
+  function scheduleReadingAnimation(callback, delay) {
+    const timer = window.setTimeout(() => {
+      readingAnimationTimers.delete(timer);
+      callback();
+    }, delay);
+    readingAnimationTimers.add(timer);
+  }
+
+  function resetReviewHourglass() {
+    const hourglass = document.querySelector('#review-hourglass');
+    hourglass.classList.add('is-resetting');
+    hourglass.classList.remove('is-running', 'direction-forward', 'direction-reverse');
+    hourglass.style.transform = 'rotate(0deg)';
+    void hourglass.offsetWidth;
+    hourglass.classList.remove('is-resetting');
+  }
+
   function clearReadingTimer() {
     if (readingTimer) window.clearTimeout(readingTimer);
+    readingAnimationTimers.forEach((timer) => window.clearTimeout(timer));
+    readingAnimationTimers.clear();
     readingTimer = null;
     readingGateComplete = false;
+    document.querySelector('#review-timer').classList.remove('is-finished');
+    resetReviewHourglass();
   }
 
   function setReviewTimerVisible(visible) {
     const timer = document.querySelector('#review-timer');
     timer.classList.toggle('hidden', !visible);
-    if (!visible) return;
-    document.querySelector('#review-bomb').classList.remove('is-complete');
+    if (visible) timer.classList.remove('is-finished');
+  }
+
+  function runReviewHourglassCycle(cycleIndex) {
+    const hourglass = document.querySelector('#review-hourglass');
+    hourglass.classList.remove('is-running', 'direction-forward', 'direction-reverse');
+    void hourglass.offsetWidth;
+    hourglass.classList.add(cycleIndex % 2 === 0 ? 'direction-forward' : 'direction-reverse');
+    hourglass.classList.add('is-running');
+
+    scheduleReadingAnimation(() => {
+      hourglass.style.transform = `rotate(${(cycleIndex + 1) * 180}deg)`;
+    }, READING_FALL_MS);
+
+    if (cycleIndex + 1 < READING_CYCLES) {
+      scheduleReadingAnimation(() => runReviewHourglassCycle(cycleIndex + 1), READING_CYCLE_MS);
+    }
   }
 
   function startReadingTimer(durationMs) {
     clearReadingTimer();
-    document.querySelector('#review-bomb').style.setProperty('--bomb-duration', `${durationMs}ms`);
     setReviewTimerVisible(true);
+    runReviewHourglassCycle(0);
     const startedAt = performance.now();
 
-    const tick = () => {
-      const ratio = Math.min(1, (performance.now() - startedAt) / durationMs);
-      if (ratio < 1) {
-        readingTimer = window.setTimeout(tick, 100);
+    const finishWhenElapsed = () => {
+      const remaining = durationMs - (performance.now() - startedAt);
+      if (remaining > 0) {
+        readingTimer = window.setTimeout(finishWhenElapsed, remaining);
         return;
       }
       readingTimer = null;
       readingGateComplete = true;
-      document.querySelector('#review-timer').classList.add('is-complete');
-      document.querySelector('#review-bomb').classList.add('is-complete');
+      document.querySelector('#review-timer').classList.add('is-finished');
       updateChecklistAction();
+      scheduleReadingAnimation(() => document.querySelector('#review-timer').classList.add('hidden'), 540);
     };
 
-    document.querySelector('#review-timer').classList.remove('is-complete');
-    tick();
+    readingTimer = window.setTimeout(finishWhenElapsed, durationMs);
   }
 
   function updateChecklistAction() {

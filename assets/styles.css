@@ -360,23 +360,37 @@ fieldset { min-width: 0; padding: 0; margin: 0; border: 0; }
 .modal h2 { margin-bottom: 12px; font-size: 29px; }
 .modal-copy { color: var(--muted); font-size: 13px; line-height: 1.65; }
 .review-timer {
-  margin: 20px 0 6px;
+  min-height: 62px;
+  margin: 20px 0 15px;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 14px;
+  overflow: hidden;
+  transform-origin: left center;
 }
-.review-bomb { position: relative; display: inline-block; flex: 0 0 auto; width: 38px; height: 36px; transform-origin: 50% 65%; animation: bomb-wobble 1.8s ease-in-out infinite; }
-.bomb-body { position: absolute; right: 3px; bottom: 2px; width: 29px; height: 29px; border-radius: 48% 52% 46% 54%; background: radial-gradient(circle at 34% 28%, #6f8277 0 7%, #385847 8% 35%, #1d3d2d 66%, #112a1e 100%); box-shadow: inset -3px -4px 0 rgba(7, 25, 17, .26), 2px 4px 0 rgba(20, 54, 38, .13); animation: bomb-erode var(--bomb-duration, 20000ms) linear forwards; }
-.bomb-body::after { content: ''; position: absolute; right: 4px; bottom: 3px; width: 6px; height: 7px; border-radius: 50%; background: rgba(132, 167, 141, .36); animation: bomb-crumble var(--bomb-duration, 20000ms) linear forwards; }
-.bomb-fuse { position: absolute; top: 0; right: 8px; z-index: 1; width: 12px; height: 13px; border-top: 3px solid #7a6844; border-right: 3px solid #7a6844; border-radius: 0 10px 0 0; transform: rotate(-18deg); transform-origin: bottom left; }
-.bomb-spark { position: absolute; top: -7px; right: -6px; width: 7px; height: 7px; border-radius: 50%; background: #ffd45a; box-shadow: 0 0 5px 2px rgba(245, 175, 45, .72); animation: fuse-flicker .55s ease-in-out infinite alternate; }
-.review-timer > span:last-child { color: #4f6257; font-size: 11px; font-weight: 700; }
-.review-bomb.is-complete { animation: bomb-blast .7s ease-out forwards; filter: saturate(1.5) brightness(1.15); }
-@keyframes bomb-wobble { 0%, 100% { transform: rotate(-4deg) translateY(1px); } 50% { transform: rotate(5deg) translateY(-2px); } }
-@keyframes bomb-erode { 0% { opacity: 1; transform: scale(1); clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); } 55% { opacity: .94; transform: scale(.9) rotate(-4deg); clip-path: polygon(5% 0, 100% 7%, 93% 100%, 0 91%); } 82% { opacity: .72; transform: scale(.7) rotate(8deg); clip-path: polygon(21% 4%, 85% 11%, 96% 79%, 12% 100%); } 100% { opacity: .18; transform: scale(.42) rotate(18deg); clip-path: polygon(42% 12%, 73% 25%, 82% 67%, 28% 78%); } }
-@keyframes bomb-crumble { 0% { opacity: .36; transform: scale(1); } 100% { opacity: 0; transform: scale(.2) translate(8px, 7px); } }
-@keyframes fuse-flicker { from { opacity: .45; transform: scale(.75); } to { opacity: 1; transform: scale(1.25); } }
-@keyframes bomb-blast { 0% { opacity: 1; transform: scale(1) rotate(-8deg); } 45% { opacity: 1; transform: scale(1.35) rotate(10deg); filter: saturate(2) brightness(1.5); } 100% { opacity: 0; transform: scale(2.2) rotate(28deg); visibility: hidden; } }
+.review-timer.is-finished { animation: review-timer-finish .52s ease-in forwards; }
+.review-timer > span:last-child { color: #4d5f54; font-size: 13px; font-weight: 700; letter-spacing: -.01em; }
+.review-hourglass { position: relative; width: 42px; height: 54px; flex: 0 0 auto; transform-origin: 50% 50%; transition: transform .8s cubic-bezier(.45, 0, .2, 1); filter: drop-shadow(0 5px 5px rgba(23, 33, 27, .12)); }
+.review-hourglass.is-resetting { transition: none; }
+.review-hourglass svg { width: 100%; height: 100%; display: block; overflow: visible; }
+.review-glass-shell { fill: url(#review-glass-gradient); stroke: #6d7d74; stroke-width: 1.7; stroke-linejoin: round; }
+.review-svg-frame { fill: url(#review-frame-gradient); stroke: #1c2721; stroke-width: 1; }
+.review-neck-ring { fill: #35423b; }
+.review-svg-sand { fill: url(#review-sand-gradient); transform-box: fill-box; transform-origin: 50% 100%; will-change: transform; }
+.review-sand-stream { fill: url(#review-sand-gradient); opacity: 0; transform-box: fill-box; transform-origin: 50% 0; }
+.review-hourglass.direction-forward .review-sand-top { transform: scaleY(.7); }
+.review-hourglass.direction-forward .review-sand-bottom { transform: scaleY(.035); }
+.review-hourglass.direction-reverse .review-sand-top { transform: scaleY(.035); }
+.review-hourglass.direction-reverse .review-sand-bottom { transform: scaleY(.7); }
+.review-hourglass.direction-forward.is-running .review-sand-top,
+.review-hourglass.direction-reverse.is-running .review-sand-bottom { animation: review-sand-drain 2.2s linear forwards; }
+.review-hourglass.direction-forward.is-running .review-sand-bottom,
+.review-hourglass.direction-reverse.is-running .review-sand-top { animation: review-sand-fill 2.2s linear forwards; }
+.review-hourglass.is-running .review-sand-stream { animation: review-stream-fall 2.2s linear forwards; }
+@keyframes review-sand-drain { 0% { transform: scaleY(.7); } 100% { transform: scaleY(.035); } }
+@keyframes review-sand-fill { 0% { transform: scaleY(.035); } 100% { transform: scaleY(.7); } }
+@keyframes review-stream-fall { 0%, 4% { opacity: 0; transform: scaleY(.15); } 8%, 88% { opacity: 1; transform: scaleY(1); } 96%, 100% { opacity: 0; transform: scaleY(.2); } }
+@keyframes review-timer-finish { 0% { min-height: 62px; max-height: 62px; margin-top: 20px; margin-bottom: 15px; opacity: 1; transform: translateY(0) scale(1); } 100% { min-height: 0; max-height: 0; margin-top: 0; margin-bottom: 0; opacity: 0; transform: translateY(-8px) scale(.96); } }
 .review-list { margin: 24px 0; border-top: 1px solid var(--line); }
 .review-list > div { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 14px; padding: 13px 0; border-bottom: 1px solid var(--line); }
 .review-list dt { color: #899089; font-size: 10px; text-transform: uppercase; letter-spacing: 0.07em; }
@@ -492,6 +506,9 @@ footer { padding: 34px; text-align: center; color: #8b928d; font: 10px "DM Mono"
   input, select, textarea { font-size: 16px; }
   .salary-choice span { font-size: 10px; }
   .modal-inner { padding: 30px 20px 24px; }
+  .review-timer { min-width: 0; gap: 11px; }
+  .review-timer > span:last-child { min-width: 0; font-size: 12px; line-height: 1.4; overflow-wrap: anywhere; }
+  .review-hourglass { width: 38px; height: 49px; }
   .modal-actions { flex-direction: column-reverse; }
   .modal-actions button { width: 100%; }
   .review-list > div { grid-template-columns: 90px minmax(0, 1fr); }
