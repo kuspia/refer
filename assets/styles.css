@@ -376,8 +376,10 @@ fieldset { min-width: 0; padding: 0; margin: 0; border: 0; }
 .review-glass-shell { fill: url(#review-glass-gradient); stroke: #6d7d74; stroke-width: 1.7; stroke-linejoin: round; }
 .review-svg-frame { fill: url(#review-frame-gradient); stroke: #1c2721; stroke-width: 1; }
 .review-neck-ring { fill: #35423b; }
-.review-svg-sand { fill: url(#review-sand-gradient); transform-box: fill-box; transform-origin: 50% 100%; will-change: transform; }
+.review-svg-sand { fill: url(#review-sand-gradient); transform-box: fill-box; will-change: transform; }
 .review-sand-stream { fill: url(#review-sand-gradient); opacity: 0; transform-box: fill-box; transform-origin: 50% 0; }
+.review-hourglass.direction-forward .review-svg-sand { transform-origin: 50% 100%; }
+.review-hourglass.direction-reverse .review-svg-sand { transform-origin: 50% 0; }
 .review-hourglass.direction-forward .review-sand-top { transform: scaleY(.7); }
 .review-hourglass.direction-forward .review-sand-bottom { transform: scaleY(.035); }
 .review-hourglass.direction-reverse .review-sand-top { transform: scaleY(.035); }
