@@ -369,15 +369,19 @@ fieldset { min-width: 0; padding: 0; margin: 0; border: 0; }
   border-radius: 10px;
   background: #f4f8f3;
 }
-.review-bomb { position: relative; display: inline-grid; place-items: center; width: 32px; height: 32px; font-size: 24px; line-height: 1; transform-origin: 50% 60%; animation: bomb-spin 1.25s ease-in-out infinite; }
-.review-bomb::before { content: '✦'; position: absolute; top: -9px; right: -5px; color: #e6a52d; font-size: 13px; animation: fuse-flicker .55s ease-in-out infinite alternate; }
-.review-bomb::after { content: ''; position: absolute; top: -3px; right: 2px; width: 5px; height: 8px; border-radius: 50%; background: #f4c44d; filter: blur(1px); animation: fuse-flicker .55s ease-in-out infinite alternate-reverse; }
+.review-bomb { position: relative; display: inline-block; flex: 0 0 auto; width: 38px; height: 36px; transform-origin: 50% 65%; animation: bomb-wobble 1.8s ease-in-out infinite; }
+.bomb-body { position: absolute; right: 3px; bottom: 2px; width: 29px; height: 29px; border-radius: 48% 52% 46% 54%; background: radial-gradient(circle at 34% 28%, #6f8277 0 7%, #385847 8% 35%, #1d3d2d 66%, #112a1e 100%); box-shadow: inset -3px -4px 0 rgba(7, 25, 17, .26), 2px 4px 0 rgba(20, 54, 38, .13); animation: bomb-erode var(--bomb-duration, 20000ms) linear forwards; }
+.bomb-body::after { content: ''; position: absolute; right: 4px; bottom: 3px; width: 6px; height: 7px; border-radius: 50%; background: rgba(132, 167, 141, .36); animation: bomb-crumble var(--bomb-duration, 20000ms) linear forwards; }
+.bomb-fuse { position: absolute; top: 0; right: 8px; z-index: 1; width: 12px; height: 13px; border-top: 3px solid #7a6844; border-right: 3px solid #7a6844; border-radius: 0 10px 0 0; transform: rotate(-18deg); transform-origin: bottom left; }
+.bomb-spark { position: absolute; top: -7px; right: -6px; width: 7px; height: 7px; border-radius: 50%; background: #ffd45a; box-shadow: 0 0 5px 2px rgba(245, 175, 45, .72); animation: fuse-flicker .55s ease-in-out infinite alternate; }
 .review-timer > span:last-child { color: #4f6257; font-size: 11px; font-weight: 700; }
 .review-timer.is-complete { border-color: #9bc3a7; background: #edf7f0; }
-.review-bomb.is-complete { animation: bomb-ready .45s ease-in-out infinite alternate; filter: saturate(1.35) brightness(1.08); }
-@keyframes bomb-spin { 0%, 100% { transform: rotate(-10deg) translateY(1px); } 50% { transform: rotate(10deg) translateY(-2px); } }
+.review-bomb.is-complete { animation: bomb-blast .7s ease-out forwards; filter: saturate(1.5) brightness(1.15); }
+@keyframes bomb-wobble { 0%, 100% { transform: rotate(-4deg) translateY(1px); } 50% { transform: rotate(5deg) translateY(-2px); } }
+@keyframes bomb-erode { 0% { opacity: 1; transform: scale(1); clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); } 55% { opacity: .94; transform: scale(.9) rotate(-4deg); clip-path: polygon(5% 0, 100% 7%, 93% 100%, 0 91%); } 82% { opacity: .72; transform: scale(.7) rotate(8deg); clip-path: polygon(21% 4%, 85% 11%, 96% 79%, 12% 100%); } 100% { opacity: .18; transform: scale(.42) rotate(18deg); clip-path: polygon(42% 12%, 73% 25%, 82% 67%, 28% 78%); } }
+@keyframes bomb-crumble { 0% { opacity: .36; transform: scale(1); } 100% { opacity: 0; transform: scale(.2) translate(8px, 7px); } }
 @keyframes fuse-flicker { from { opacity: .45; transform: scale(.75); } to { opacity: 1; transform: scale(1.25); } }
-@keyframes bomb-ready { from { transform: scale(1) rotate(-8deg); } to { transform: scale(1.12) rotate(8deg); } }
+@keyframes bomb-blast { 0% { opacity: 1; transform: scale(1) rotate(-8deg); } 45% { opacity: 1; transform: scale(1.35) rotate(10deg); filter: saturate(2) brightness(1.5); } 100% { opacity: 0; transform: scale(2.2) rotate(28deg); visibility: hidden; } }
 .review-list { margin: 24px 0; border-top: 1px solid var(--line); }
 .review-list > div { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 14px; padding: 13px 0; border-bottom: 1px solid var(--line); }
 .review-list dt { color: #899089; font-size: 10px; text-transform: uppercase; letter-spacing: 0.07em; }

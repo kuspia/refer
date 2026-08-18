@@ -19,8 +19,8 @@
   const REPOSITORY_API = 'https://api.github.com/repos/kuspia/refer';
   const COUNTER_URL = 'https://raw.githubusercontent.com/kuspia/refer/main/data/counter.json';
   const OFFICIAL_JOBS_API = 'https://kushagra-referral-jobs.kuspia-referral.workers.dev/jobs';
-  const DETAILS_REVIEW_MINIMUM_MS = 20000;
-  const ACKNOWLEDGEMENT_MINIMUM_MS = 15000;
+  const DETAILS_REVIEW_MINIMUM_MS = 16000;
+  const ACKNOWLEDGEMENT_MINIMUM_MS = 16000;
   let confirmationStep = 1;
   let pendingPayload = null;
   let copyResetTimer = null;
@@ -207,6 +207,7 @@
 
   function startReadingTimer(durationMs) {
     clearReadingTimer();
+    document.querySelector('#review-bomb').style.setProperty('--bomb-duration', `${durationMs}ms`);
     setReviewTimerVisible(true);
     const startedAt = performance.now();
 
@@ -256,10 +257,9 @@
     document.querySelector('#modal-title').textContent = 'Confirm every requirement';
     document.querySelector('#modal-copy').textContent = 'Tap each item to turn it green. If any answer is no, go back and correct it before continuing.';
     document.querySelector('#review-list').innerHTML = `
-      <label class="confirm-check"><input type="checkbox" data-confirm-check /><span class="check-icon">✓</span><span>The correct active role was selected from the official smallcase careers listing.</span></label>
-      <label class="confirm-check"><input type="checkbox" data-confirm-check /><span class="check-icon">✓</span><span>The recommendation is written in the third person.</span></label>
-      <label class="confirm-check"><input type="checkbox" data-confirm-check /><span class="check-icon">✓</span><span>The third-person recommendation is clear, neatly written, and checked for spelling and grammar errors.</span></label>
-      <label class="confirm-check"><input type="checkbox" data-confirm-check /><span class="check-icon">✓</span><span>Latest résumé is public and includes email, phone, GitHub, and LinkedIn.</span></label>`;
+      <label class="confirm-check"><input type="checkbox" data-confirm-check /><span class="check-icon">✓</span><span>The recommendation is written in the third person, is clear, neatly written, and checked for spelling and grammar errors.</span></label>
+      <label class="confirm-check"><input type="checkbox" data-confirm-check /><span class="check-icon">✓</span><span>Latest résumé is public and includes email, phone, GitHub, and LinkedIn.</span></label>
+      <label class="confirm-check"><input type="checkbox" data-confirm-check /><span class="check-icon">✓</span><span>The communication and problem-solving proficiency ratings are truthful and not misleading to the best of my knowledge.</span></label>`;
     startReadingTimer(DETAILS_REVIEW_MINIMUM_MS);
     updateChecklistAction();
     confirmDialog.showModal();
