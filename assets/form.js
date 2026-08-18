@@ -19,9 +19,13 @@
   const REPOSITORY_API = 'https://api.github.com/repos/kuspia/refer';
   const COUNTER_URL = 'https://raw.githubusercontent.com/kuspia/refer/main/data/counter.json';
   const OFFICIAL_JOBS_API = 'https://kushagra-referral-jobs.kuspia-referral.workers.dev/jobs';
+  const DETAILS_REVIEW_MINIMUM_MS = 16000;
+  const ACKNOWLEDGEMENT_MINIMUM_MS = 13000;
   let confirmationStep = 1;
   let pendingPayload = null;
   let copyResetTimer = null;
+  let readingTimer = null;
+  let readingGateComplete = false;
   const officialRoles = new Map();
 
   function githubHeaders(token) {
@@ -188,9 +192,70 @@
     ];
   }
 
+  function clearReadingTimer() {
+    if (readingTimer) window.clearTimeout(readingTimer);
+    readingTimer = null;
+    readingGateComplete = false;
+  }
+
+  function setReviewTimerVisible(visible) {
+    const timer = document.querySelector('#review-timer');
+    timer.classList.toggle('hidden', !visible);
+    if (!visible) return;
+    document.querySelector('#review-timer-progress').style.transform = 'scaleX(0)';
+    document.querySelector('#review-timer-status').textContent = 'Review in progress';
+  }
+
+  function startReadingTimer(durationMs) {
+    clearReadingTimer();
+    setReviewTimerVisible(true);
+    const startedAt = performance.now();
+    const progress = document.querySelector('#review-timer-progress');
+    const status = document.querySelector('#review-timer-status');
+
+    const tick = () => {
+      const ratio = Math.min(1, (performance.now() - startedAt) / durationMs);
+      progress.style.transform = `scaleX(${ratio})`;
+      if (ratio < 1) {
+        readingTimer = window.setTimeout(tick, 100);
+        return;
+      }
+      readingTimer = null;
+      readingGateComplete = true;
+      status.textContent = 'You can continue when ready';
+      document.querySelector('#review-timer').classList.add('is-complete');
+      updateChecklistAction();
+    };
+
+    document.querySelector('#review-timer').classList.remove('is-complete');
+    tick();
+  }
+
+  function updateChecklistAction() {
+    if (confirmationStep !== 1 && confirmationStep !== 3) return;
+    const selector = confirmationStep === 1 ? '[data-confirm-check]' : '[data-acknowledgement]';
+    const checks = [...document.querySelectorAll(selector)];
+    const allChecked = checks.length > 0 && checks.every((check) => check.checked);
+    const actionReady = allChecked && readingGateComplete;
+    confirmButton.disabled = !actionReady;
+
+    if (confirmationStep === 1) {
+      confirmButton.innerHTML = actionReady
+        ? 'All confirmed, continue <span>→</span>'
+        : allChecked
+          ? 'Keep reading to continue <span>→</span>'
+          : 'Confirm all to continue <span>→</span>';
+    } else {
+      confirmButton.innerHTML = actionReady
+        ? 'Acknowledged, generate link <span>→</span>'
+        : allChecked
+          ? 'Keep reading to continue <span>→</span>'
+          : 'Acknowledge both to continue <span>→</span>';
+    }
+  }
+
   function showFirstReview(payload) {
     confirmationStep = 1;
-    confirmButton.disabled = true;
     document.querySelector('#modal-step').textContent = 'Details review · 1 of 2';
     document.querySelector('#modal-title').textContent = 'Confirm every requirement';
     document.querySelector('#modal-copy').textContent = 'Tap each item to turn it green. If any answer is no, go back and correct it before continuing.';
@@ -199,12 +264,15 @@
       <label class="confirm-check"><input type="checkbox" data-confirm-check /><span class="check-icon">✓</span><span>The recommendation is written in the third person.</span></label>
       <label class="confirm-check"><input type="checkbox" data-confirm-check /><span class="check-icon">✓</span><span>The third-person recommendation is clear, neatly written, and checked for spelling and grammar errors.</span></label>
       <label class="confirm-check"><input type="checkbox" data-confirm-check /><span class="check-icon">✓</span><span>Latest résumé is public and includes email, phone, GitHub, and LinkedIn.</span></label>`;
-    confirmButton.innerHTML = 'Confirm all to continue <span>→</span>';
+    startReadingTimer(DETAILS_REVIEW_MINIMUM_MS);
+    updateChecklistAction();
     confirmDialog.showModal();
   }
 
   function showSecondReview() {
     confirmationStep = 2;
+    clearReadingTimer();
+    setReviewTimerVisible(false);
     confirmButton.disabled = false;
     document.querySelector('#modal-step').textContent = 'Details review · 2 of 2';
     document.querySelector('#modal-title').textContent = 'Are all these details correct?';
@@ -220,14 +288,14 @@
 
   function showAcknowledgement() {
     confirmationStep = 3;
-    confirmButton.disabled = true;
     document.querySelector('#modal-step').textContent = 'Candidate acknowledgement';
     document.querySelector('#modal-title').textContent = 'Please acknowledge before sharing';
     document.querySelector('#modal-copy').textContent = 'Turn both items green to confirm that you understand the referral process.';
     document.querySelector('#review-list').innerHTML = `
       <label class="confirm-check"><input type="checkbox" data-acknowledgement /><span class="check-icon">✓</span><span>I understand that I do not need to apply separately through the job portal. If I am shortlisted, HR will contact me directly.</span></label>
       <label class="confirm-check"><input type="checkbox" data-acknowledgement /><span class="check-icon">✓</span><span>I understand that Kushagra cannot track my application status. I will not follow up with him for updates; if I am shortlisted, HR will contact me directly.</span></label>`;
-    confirmButton.innerHTML = 'Acknowledge both to continue <span>→</span>';
+    startReadingTimer(ACKNOWLEDGEMENT_MINIMUM_MS);
+    updateChecklistAction();
   }
 
   async function createLink() {
@@ -302,21 +370,10 @@
     else createLink();
   });
   document.querySelector('#review-list').addEventListener('change', () => {
-    if (confirmationStep === 1) {
-      const checks = [...document.querySelectorAll('[data-confirm-check]')];
-      confirmButton.disabled = checks.length !== 4 || checks.some((check) => !check.checked);
-      confirmButton.innerHTML = confirmButton.disabled
-        ? 'Confirm all to continue <span>→</span>'
-        : 'All confirmed, continue <span>→</span>';
-    } else if (confirmationStep === 3) {
-      const acknowledgements = [...document.querySelectorAll('[data-acknowledgement]')];
-      confirmButton.disabled = acknowledgements.length !== 2 || acknowledgements.some((item) => !item.checked);
-      confirmButton.innerHTML = confirmButton.disabled
-        ? 'Acknowledge both to continue <span>→</span>'
-        : 'Acknowledged, generate link <span>→</span>';
-    }
+    updateChecklistAction();
   });
   document.querySelectorAll('[data-close-modal]').forEach((button) => button.addEventListener('click', () => confirmDialog.close()));
+  confirmDialog.addEventListener('close', clearReadingTimer);
   copyButton.addEventListener('click', async () => {
     await copyText(generatedLink.value);
     copyButton.textContent = 'Copied to clipboard ✓';
